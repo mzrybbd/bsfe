@@ -7,7 +7,7 @@
         </div>
           <div class="layout-nav">
 	          <el-button-group>
-	            <el-button type="ghost" size="small" icon="iconfont icon-user"> 当前用户：教师</el-button>
+	            <el-button type="ghost" size="small" icon="iconfont icon-user"> 当前用户：<em>{{ teacher[0].tname }}</em> 教师</el-button>
 	            <el-button type="ghost" size="small" icon="iconfont icon-logout1" @click="logout"> 退出</el-button>
 	          </el-button-group>
         </div>
@@ -23,21 +23,28 @@
 		      text-color="#fff"
 		      active-text-color="#ffd04b"
 		      @select="handleSelect">
-		      <el-menu-item index="1">
-		        <span slot="title">班级管理</span>
-		      </el-menu-item>
+		      <el-submenu index="1">
+		        <template slot="title">班级管理</template>
+            <el-menu-item index="1-1">班级管理</el-menu-item>
+            <el-menu-item index="1-2">班级学情</el-menu-item>
+		      </el-submenu>
 		      <el-menu-item index="2">
 		        <span slot="title">课表管理</span>
 		      </el-menu-item>
-		      <el-menu-item index="3">
-		        <span slot="title">实验管理</span>
-		      </el-menu-item>
+		      <el-submenu index="3">
+		        <template slot="title">实验管理</template>
+            <el-menu-item index="3-1">上传文件</el-menu-item>
+            <el-menu-item index="3-2">实验记录</el-menu-item>
+            <el-menu-item index="3-3">学生记录</el-menu-item>
+		      </el-submenu>
 		      <el-menu-item index="4">
-		        <span slot="title">消息管理</span>
+		        <template slot="title">消息管理</template>
 		      </el-menu-item>
-          <el-menu-item index="5">
-		        <span slot="title">个人中心</span>
-		      </el-menu-item>
+          <el-submenu index="5">
+		        <template slot="title">个人中心</template>
+            <el-menu-item index="5-1">基本信息</el-menu-item>
+            <el-menu-item index="5-2">修改信息</el-menu-item>
+		      </el-submenu>
 		    </el-menu>
 		    </el-aside>
 		    <el-main class="main">
@@ -56,22 +63,25 @@
 	export default {
 		data() {
 			return {
-
+        teacher: [{tname: ''}]
 			}
     },
     created() {
       this.checkLogin()
     },
+    mounted() {
+      this.getTeacher()
+    },
 		methods: {
 			handleSelect(key, keyPath){    
         switch(key){
-          case '1':
+          case '1-1':
             this.$router.push('/teacher/class_manager');
             break;
           case '2':
             this.$router.push('/teacher/coursetable_manager');
             break;
-          case '3':
+          case '3-1':
             this.$router.push('/teacher/expriment_manager');
             break;
           case '4':
@@ -83,13 +93,27 @@
         }
       },
       checkLogin() {
-        let userId = sessionStorage.getItem("uname");
-        let role = sessionStorage.getItem("role");
+        let userId = this.teacher.tno = sessionStorage.getItem("uname");
+        let role = this.teacher.role = sessionStorage.getItem("role");
         if (!userId || role !== '教师') {
           this.$message.info('请先登录')
           this.$router.push('/login')
           return;
         }
+      },
+      getTeacher() {
+        this.$nextTick(function() {
+          this.$ajax({
+            url: "/teacher/one",
+            data: {
+              tno: this.teacher.tno
+            }
+          }).then(res => {
+            this.teacher = res.data
+          }).catch(err => {
+            console.log(err)
+          })
+        })
       },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
