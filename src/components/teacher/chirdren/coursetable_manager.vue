@@ -1,170 +1,128 @@
 <template>
-  <div class="block">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="实验时间" prop="dates">
-        <el-date-picker
-          type="dates"
-          v-model="form.dates"
-          placeholder="选择一个或多个日期"
-          value-format="yyyy-MM-dd">
-        </el-date-picker>
-      </el-form-item>
-
-      <el-form-item prop="cname" label="班级">
-        <el-select v-model="form.cname" filterable placeholder="请选择班级">
-          <el-option
-            v-for="item in options"
-            :key="item.cname"
-            :label="item.cname"
-            :value="item.cname">
-        </el-option>
-        </el-select> 
-      </el-form-item>
-      <el-form-item label="上课时间" prop="time">
-        <el-select v-model="form.time" @change="change" placeholder="请选择">
-          <el-option
-            v-for="item in times"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="address" label="地址">
-        <el-input v-model="form.address" placeholder="地址"></el-input>
+  <div>
+    <el-form :inline="true" class="demo-form-inline" :model="form">
+      <el-form-item>
+        <el-input v-model="search" size="small" prefix-icon="el-icon-search" placeholder="请输入班级或日期或时间" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
-        <el-button @click="reset('form')">重置</el-button>
+        <el-button size="mini" type="primary" @click="handleAdd">新增课表</el-button>
       </el-form-item>
     </el-form>
-  </div>
+    <create_ct ref="create_ct" @create="update"></create_ct>
+    <update_ct ref="update_ct" @update="update"></update_ct>
+	  <el-table
+      height="500"
+	    ref="filterTable"
+	    :data="tableData.filter(data => !search || data.cdate.toLowerCase().includes(search.toLowerCase()) || data.stime.toLowerCase().includes(search.toLowerCase()) || data.cname.toLowerCase().includes(search.toLowerCase()))">
+      <el-table-column
+	      prop="cname"
+	      label="班级"
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="cdate"
+	      label="日期"
+	      sortable
+	    >
+	    </el-table-column>
+	    <el-table-column
+	      prop="stime"
+	      sortable
+	      label="开始时间">
+	    </el-table-column>
+      <el-table-column
+	      prop="etime"
+        sortable
+	      label="结束时间">
+	    </el-table-column>
+      <el-table-column
+	      prop="address"
+	      label="上课地址">
+	    </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click.native.prevent="handleDelete(scope.$index, scope.row, tableData)">删除</el-button>
+        </template>
+      </el-table-column>
+  	</el-table>
+	</div>
 </template>
 
 <script>
+import create_ct from './operation/create_courseTable.vue'
+import update_ct from './operation/update_courseTable.vue'
 export default {
+  components: { create_ct, update_ct },
   data() {
     return {
-      form: {
-        address: '机房3楼',
-        dates: [],
-        startTime: '',
-        endTime: ''
-      },
-      rules: {
-        dates: [
-          { required: true, message:'请选择日期', trigger: 'blur' }
-        ],
-        cname: [
-          { required: true, message:'请选择班级', trigger: 'blur' }
-        ],
-        time: [
-          { required: true, message:'请选择时间', trigger: 'blur' }
-        ],
-        address: [
-          { required: true, message:'请输入地址', trigger: 'blur' }
-        ]
-      },
-      timeFlag: false,
-      options: [],
-      times: [
-        {label: '8:00 ~ 9:50（1、2节）', value: '1'}, 
-        {label: '10:10 ~ 12:00（3、4节）', value: '2'}, 
-        {label: '14:00 ~ 15:50（冬季5、6节）', value: '3-1'}, 
-        {label: '14:30 ~ 16:20（冬季5、6节）', value: '3-2'}, 
-        {label: '16:00 ~ 17:50（夏季7、8节）', value: '4-1'}, 
-        {label: '16:30 ~ 18:20（冬季7、8节）', value: '4-2'}, 
-        {label: '19:30 ~ 21:20（9、10节）', value: '5'}, 
-        {label: '其他', value: '0'}]
+      tableData: [],
+      search:　'',
+      form: {},
     }
   },
   mounted() {
-    this.getList()
+    this.getData();
   },
   methods: {
-    onSubmit(name) {
-      this.$refs[name].validate(valid => {
-        let len = this.form.dates.length
-        if(valid && len > 0){
-          for(let i = 0; i < len; i++){
-            this.$ajax({
-              url: "/teacher/addCourse",
-              data: {
-                tno: sessionStorage.getItem('uname'),
-                cname: this.form.cname,
-                cdate: this.form.dates[i],
-                stime: this.form.startTime,
-                etime: this.form.endTime,
-                address: this.form.address
-              }
-            })
-            .then(res => {
-              if(res.status === "error") {
-                this.$message.error(res.msg)
-              }
-              else {
-                this.$message.success('添加成功!')
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            })
-          }
-        }
-      })
-    },
-    reset(name) {
-      this.$refs[name].resetFields()
-      this.form.address='机房3层'
-    },
-  	getList() {
+    getData() {
       this.$ajax({
-        url: "/class/one",
+        url: "/teacher/search",
         data: {
           tno: sessionStorage.getItem('uname')
         }
+      }).then(res => {
+        this.tableData = res.data
+      }).catch(err => {
+        console.log(err)
       })
-      .then(res => {
-        this.options = res.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
     },
-    change(item) {
-      switch (item){
-        case '1':
-          this.form.startTime = '08:00:00'
-          this.form.endTime = '09:50:00'
-          break;
-        case '2':
-          this.form.startTime = '10:10:00'
-          this.form.endTime = '12:00:00'
-          break;
-        case '3-1':
-          this.form.startTime = '14:00:00'
-          this.form.endTime = '15:50:00'
-          break;
-        case '3-2':
-          this.form.startTime = '14:30:00'
-          this.form.endTime = '16:20:00'
-          break;
-        case '4-1':
-          this.form.startTime = '16:10:00'
-          this.form.endTime = '17:50:00'
-          break;
-        case '4-2':
-          this.form.startTime = '16:30:00'
-          this.form.endTime = '18:20:00'
-          break;
-        case '5':
-          this.form.startTime = '19:30:00'
-          this.form.endTime = '21:20:00'
-          break;
-        default:
-          this.timeFlag = true
-      }
-    }
+    update() {
+      this.getData()
+    },
+    handleAdd() {
+      this.$refs.create_ct.showFrame()
+    },
+     handleEdit(index, row) {
+      this.$refs.update_ct.setRuleForm(Object.assign({}, row))
+      console.log(row)
+    },
+    handleDelete(index, row, rows) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$ajax({
+          url: '/teacher/deleteCt',
+          data: {
+            id: row.id
+          }
+        }).then(res => {
+          if(res.status === 'error'){
+            this.$message.error(res.msg)
+          }else{
+            rows.splice(index, 1)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      })
+    },
   }
 }
 </script>

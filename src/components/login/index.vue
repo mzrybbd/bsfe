@@ -4,24 +4,24 @@
         <div class="filter"></div>
         <canvas id="canvas"></canvas>
         <div class="login-box">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" size="small">
-                <el-form-item>
-                    <h1><i class="el-icon-edit"></i>&nbsp;计算机组成原理实验系统</h1>
-                </el-form-item>
-                <el-form-item prop="name">
-                    <el-input v-model="ruleForm.name" placeholder="账号" clearable></el-input>
-                </el-form-item>
-                <el-form-item prop="pass">
-                    <el-input type="password" v-model="ruleForm.pass" placeholder="密码" clearable @keyup.enter.native="submitForm('ruleForm')"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" :loading="loading" class="fit" @click="submitForm('ruleForm')">
-                        <span v-if="!loading">登 录</span>
-                        <span v-else>登 录 中...</span>
-                    </el-button>
-                    <p class="register" @click="handleCommand()">注册</p>
-                </el-form-item>
-            </el-form>
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" size="small">
+            <el-form-item>
+              <h1><i class="el-icon-edit"></i>&nbsp;计算机组成原理实验系统</h1>
+            </el-form-item>
+            <el-form-item prop="name">
+              <el-input v-model="ruleForm.name" placeholder="账号" clearable></el-input>
+            </el-form-item>
+            <el-form-item prop="pass">
+              <el-input type="password" v-model="ruleForm.pass" placeholder="密码" clearable @keyup.enter.native="submitForm('ruleForm')"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" :loading="loading" class="fit" @click="submitForm('ruleForm')">
+                  <span v-if="!loading">登 录</span>
+                  <span v-else>登 录 中...</span>
+              </el-button>
+              <p class="register" @click="handleCommand()">注册</p>
+            </el-form-item>
+          </el-form>
         </div>
     </div>
 </template>
@@ -241,6 +241,7 @@
             return
           } 
           if (valid) {
+            this.loading = true
           //登录
             this.$ajax({
               url: "/user/login",

@@ -145,7 +145,7 @@ export default {
               this.dialogFormVisible = false
             }
           }).catch(err => {
-            this.message.error('更新失败')
+            this.$message.error('更新失败')
           })
         }
       });

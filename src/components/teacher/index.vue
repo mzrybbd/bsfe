@@ -40,11 +40,9 @@
 		      <el-menu-item index="4">
 		        <template slot="title">消息管理</template>
 		      </el-menu-item>
-          <el-submenu index="5">
+          <el-menu-item index="5">
 		        <template slot="title">个人中心</template>
-            <el-menu-item index="5-1">基本信息</el-menu-item>
-            <el-menu-item index="5-2">修改信息</el-menu-item>
-		      </el-submenu>
+		      </el-menu-item>
 		    </el-menu>
 		    </el-aside>
 		    <el-main class="main">
@@ -60,7 +58,9 @@
 	</div>
 </template>
 <script>
+  import person_info from './chirdren/person_info.vue'
 	export default {
+    components: { person_info },
 		data() {
 			return {
         teacher: [{tname: ''}]

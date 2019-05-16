@@ -34,7 +34,7 @@
     <create_user ref="create_user" @create="update"></create_user>
     <create_user ref="update_user" @update="update"></create_user>
 	  <el-table
-      height="500"
+      height="600"
 	    ref="filterTable"
 	    :data="tableData.filter(data => !search || data.sno.toLowerCase().includes(search.toLowerCase()) || data.sname.toLowerCase().includes(search.toLowerCase()) || data.cname.toLowerCase().includes(search.toLowerCase()))"
 	    >
@@ -90,7 +90,7 @@
         tableData: [],
         search: '',
         form: {},
-        options: []
+        options: [],
       }
     },
     mounted(){
