@@ -65,6 +65,7 @@ export default {
         ]
       },
       options: [],
+      weekArray: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
     }
   },
   mounted() {
@@ -106,6 +107,7 @@ export default {
               stime: this.time[0],
               etime: this.time[1],
               address: this.form.address,
+              cweek: this.weekArray[new Date(this.form.cdate).getDay()],
               id: this.id
             }
           })

@@ -26,7 +26,8 @@
 		      <el-submenu index="1">
 		        <template slot="title">班级管理</template>
             <el-menu-item index="1-1">班级管理</el-menu-item>
-            <el-menu-item index="1-2">班级学情</el-menu-item>
+            <el-menu-item index="1-2">班级考勤</el-menu-item>
+            <el-menu-item index="1-3">班级学情</el-menu-item>
 		      </el-submenu>
 		      <el-menu-item index="2">
 		        <span slot="title">课表管理</span>
@@ -77,6 +78,9 @@
         switch(key){
           case '1-1':
             this.$router.push('/teacher/class_manager');
+            break;
+          case '1-2':
+            this.$router.push('/teacher/kq_manager');
             break;
           case '2':
             this.$router.push('/teacher/coursetable_manager');

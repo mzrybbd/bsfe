@@ -25,16 +25,10 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="cname" size="small"  placeholder="请输入修改后的班级名称" clearable @keyup.enter.native="updateClass()"></el-input>
-        </el-form-item>
-        <el-form-item>
           <el-button size="mini" type="primary" @click="addClass('form')">添加班级</el-button>
         </el-form-item>
         <el-form-item>
           <el-button size="mini" type="primary" @click="deleteClass('form')">删除班级</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button size="mini" type="primary" @click="updateClass()">更新班级</el-button>
         </el-form-item>
     </el-form>
     <create_user ref="create_user" @create="update"></create_user>
@@ -97,7 +91,6 @@
         search: '',
         form: {},
         options: [],
-        cname: '',
       }
     },
     mounted(){
@@ -127,35 +120,6 @@
         .catch(err => {
           console.log(err);
         });
-     },
-     updateClass() {
-       if(this.cname === '') {
-         this.$message.warning('更新的班级名称不能为空')
-       }
-       else if(this.form.cname.length > 1){
-         this.$message.warning('只能选择一个班级更新')
-       }else {
-         console.log(this.cname, this.form.cname[0])
-          this.$ajax({
-            url: '/teacher/updateC',
-            data: {
-              newCname: this.cname,
-              oldCname: this.form.cname[0],
-            }
-          }).then(res => {
-            if(res.status === 'error') {
-              this.$message.error(res.msg)
-            }else{
-              this.$message.success('更新成功!')
-              this.getList()
-              this.form = {}
-              this.cname = ''
-              this.getData()
-            }
-          }).catch(err => {
-            this.message.error('更新失败')
-          })
-       }
      },
       addClass(name) {
         let len = this.form.cname.length
@@ -188,7 +152,7 @@
       deleteClass(name) {
         let len = this.form.cname.length
         if(len > 0) {
-          this.$confirm('此操作将永久删除班级，学生，以及班级课表, 是否继续?', '提示', {
+          this.$confirm('此操作将永久删除班级以及班级课表, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -227,6 +191,8 @@
         else{
           this.$message.info('请选择班级')
         }
+
+      
       },
       handleDelete(index, row, rows) {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

@@ -17,12 +17,18 @@
       <el-table-column
 	      prop="cname"
 	      label="班级"
-	      width="180">
+	      width="180"
+        sortable>
 	    </el-table-column>
 	    <el-table-column
 	      prop="cdate"
 	      label="日期"
 	      sortable
+	    >
+      </el-table-column>
+      <el-table-column
+	      prop="cweek"
+	      label="周次"
 	    >
 	    </el-table-column>
 	    <el-table-column

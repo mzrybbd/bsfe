@@ -20,10 +20,13 @@
               <div>
                 <el-button type="primary" round size="small" @click="qiandao" :disabled="disabled">签到</el-button>
                 <el-button type="primary" round size="small" @click="qianli" :disabled="disabled2">签离</el-button>
-                <el-link type="info"  :underline="false">  {{ this.msg }}</el-link>
+                
+                 <el-link :underline="false">  &nbsp; &nbsp;{{ this.msg }}</el-link>
                 <!-- <span> {{ this.msg }}</span> -->
               </div>
-              <div>上课前5分钟内和下课后5分钟内为正常签到时间，无法提前签到或是延后签离</div>
+              <p class="kqtable" @click="handleCommand()">查看考勤表</p>
+              <i class="iconfont icon-ico_info_pointstishi"></i>
+              <span>上课前5分钟内和下课后5分钟内为正常签到时间，上课1小时后无法签到将视为旷课，无法提前签到或是延后签离</span>
               <el-button slot="reference">签到</el-button>
             </el-popover>
           </el-menu-item>
@@ -58,16 +61,17 @@ export default {
       time: '',
       record: {},
       type: -1,
-      msg: 'wode',
+      msg: '',
       disabled:　false,
       disabled2: false,
       id: -1,
+      weekArray: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+      flag: false
     }
   },
   mounted() {
     this.checkLogin()
   },
-
   methods: {
     checkLogin() {
       let userId = sessionStorage.getItem("uname");
@@ -168,14 +172,30 @@ export default {
         }
       }).then(res => {
           console.log('getCourseToday', res.data)
-          if(res.status === 'success' && res.data){
+          if(res.status === 'success' && res.data.length){
+            this.flag = true
             this.record = res.data
-            this.stime = res.data.cdate + ' ' + res.data.stime
-            this.etime = res.data.cdate + ' ' + res.data.etime
+            for(let i=0; i < this.record.length; i++) {
+              this.stime = res.data[i].cdate + ' ' + res.data[i].stime
+              this.etime = res.data[i].cdate + ' ' + res.data[i].etime
+              let now = new Date().getTime()
+              let ch1 = new Date(this.stime).getTime() - now
+              let ch2 = now - new Date(this.etime).getTime()
+              console.log('第一次检查' ,this.stime, this.etime, ch1, ch2, now)
+
+              if(ch1 <= 300000 && ch2 <= 300000){
+                console.log('第一次检查' ,this.stime, this.etime, ch1, ch2, now)
+                break
+              }else{
+                this.stime = ''
+                this.etime = ''
+              }
+            }
             console.log('hhh', this.etime)
           } 
-          else if(!res.data) {
-            this.disabled2 = this.disabled = true;
+          else if(!res.data.length) {
+            this.disabled2 = true
+            this.disabled = true;
             this.msg = '今天没有课程，不需要签到'
             this.$message.info('今天没有课程，不需要签到')
           }
@@ -183,8 +203,13 @@ export default {
             this.$message.error(res.msg)
           }
       }).then(() => {
-        if(this.stime){
-          this.msg = '签到时间为' + this.record.stime +'~' + this.record.etime
+        console.log(this.flag)
+        if(this.flag){
+          let sktime = ''
+          for(let i=0; i<this.record.length; i++) {
+            sktime += this.record[i].stime +'~' + this.record[i].etime + ';'
+          }
+          this.msg = '上课时间为' + sktime
           this.checkQiaodao()
         }
       }).catch(err => {
@@ -192,27 +217,39 @@ export default {
       })
     },
     checkQiaodao() {
-      this.$nextTick(function() {
-        this.$ajax({
-          url: 'stu/check',
-          data: {
-            sno: sessionStorage.getItem("uname"),
-          }
-        }).then(res =>　{
-          if(res.status === 'success'){
-            console.log(res.data)
-            this.disabled = res.data.wish
-            if(this.disabled) {
-              this.id = res.data.id
+      if(!this.disabled) {
+        this.$nextTick(function() {
+          this.$ajax({
+            url: 'stu/check',
+            data: {
+              sno: sessionStorage.getItem("uname"),
             }
-            if(res.data.data && res.data.data.etime !== res.data.data.stime){
-              this.disabled2 = res.data.wish
+          }).then(res =>　{
+            if(res.status === 'success'){
+              console.log('考勤表情况', res.data)
+              this.disabled = res.data.wish
+              if(this.disabled) {
+                console.log('检查签到',  this.date +' ' +res.data.data.stime, this.stime, this.etime )
+                let now = new Date(this.date +' ' +res.data.data.stime).getTime()
+                let ch1 = new Date(this.stime).getTime() - now
+                let ch2 = now - new Date(this.etime).getTime()
+                console.log(ch1, ch2)
+                if(ch1 <= 300000 && ch2 <= 300000) {
+                  this.id = res.data.id
+                  this.disabled = true
+                  if(res.data.data.etime !== res.data.data.stime) {
+                    this.disabled2 = true
+                  }
+                }else{
+                  this.disabled = false
+                }
+              }
             }
-          }
-        }).catch(err => {
-          console.log(err)
+          }).catch(err => {
+            console.log(err)
+          })
         })
-      })
+      }
     },
     daka(type) {
       this.$nextTick(function() {
@@ -224,12 +261,13 @@ export default {
             etime: this.time,
             stype: type,
             etype: 1,
-            date: this.date
+            date: this.date,
+            kweek: this.weekArray[new Date(this.date).getDay()]
           }
         }).then(res =>　{
           if(res.status=== 'success'){
-            console.log(this.disabled)
             this.disabled = true
+            console.log(this.disabled)
             if(this.type === 1) {
               this.$message.warning('迟到，签到成功！')
             }else{
@@ -244,10 +282,14 @@ export default {
         })
       })
     },
-
+    handleCommand() {
+      this.$router.push('/checkIn')
+    },
     qiandao() {
       this.checkLogin()
-      
+      this.judge()
+    },
+    judge() {
       if(!this.disabled){
         this.$nextTick(function() {
           this.$ajax({
@@ -267,6 +309,7 @@ export default {
               if(this.type !== -1) {
                 this.daka(this.type)
               }
+              console.log(this.disabled)
             } 
             else if(!res.data) {
               this.$message.info('时间过早或过晚上无法签到')
@@ -278,9 +321,7 @@ export default {
             console.log(err)
           })
         })
-         this.checkLogin()
       }
-      
     },
     cha(date) {
       let now = new Date()
@@ -304,11 +345,11 @@ export default {
         this.type = 2
       }
        // 早退0分钟
-      else if(ch  < 0 ) {
+      else if(ch  <  0 ) {
         this.type = 1
       }
       // 下课后5分钟可以签到
-      else if(ch - ctTime  < 300000){
+      else if(ch  < 300000){
         this.type = 0
       }
       console.log('wowo', ch, this.time)
@@ -321,7 +362,7 @@ export default {
           // id: this.id,
           sno: sessionStorage.getItem('uname'),
           etype: type,
-          etime: this.time
+          etime: this.time,
         }
       }).then(res =>　{
         if(res.status=== 'success'){
@@ -360,7 +401,7 @@ export default {
               message: '已取消签离'
             });          
           })
-        }else{
+        }else if(self.type!=-1){
           self.updateDaka(self.type)
         }
       }
@@ -390,5 +431,11 @@ export default {
 }
 .footer {
   margin: auto;
+}
+.kqtable {
+  font-size:14px;
+  line-height:14px;
+  color: blue;
+  cursor: pointer;
 }
 </style>

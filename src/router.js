@@ -50,6 +50,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "checkIn" */ './components/teacher/chirdren/class_manager.vue')
         },
         {
+          path: 'kq_manager',
+          name: 'kq_manager',
+          component: () => import(/* webpackChunkName: "checkIn" */ './components/teacher/chirdren/kq_manager.vue')
+        },
+        {
           path: 'coursetable_manager',
           name: 'coursetable_manager',
           component: () => import(/* webpackChunkName: "experiment" */ './components/teacher/chirdren/coursetable_manager.vue')

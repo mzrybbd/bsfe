@@ -71,6 +71,7 @@ export default {
         startTime: '',
         endTime: ''
       },
+      weekArray: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
       id: '',
       dialogFormVisible: false,
       update: false,
@@ -118,12 +119,14 @@ export default {
         }
         if(valid){
           for(let i = 0; i < len; i++){
+            let week = this.weekArray[new Date(this.form.dates[i]).getDay()]
             this.$ajax({
               url: "/teacher/addCourse",
               data: {
                 tno: sessionStorage.getItem('uname'),
                 cname: this.form.cname,
                 cdate: this.form.dates[i],
+                cweek: week,
                 stime: this.form.startTime,
                 etime: this.form.endTime,
                 address: this.form.address

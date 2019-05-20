@@ -9,7 +9,7 @@
               <h1><i class="el-icon-edit"></i>&nbsp;计算机组成原理实验系统</h1>
             </el-form-item>
             <el-form-item prop="name">
-              <el-input v-model="ruleForm.name" placeholder="账号" clearable></el-input>
+              <el-input v-model="ruleForm.name" placeholder="账号" clearable @keyup.enter.native="submitForm('ruleForm')"></el-input>
             </el-form-item>
             <el-form-item prop="pass">
               <el-input type="password" v-model="ruleForm.pass" placeholder="密码" clearable @keyup.enter.native="submitForm('ruleForm')"></el-input>
