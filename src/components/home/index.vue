@@ -89,6 +89,7 @@ export default {
       }).then(res => {
         if(res.status === 'success'){
           this.class = res.data[0].cname
+          console.log(this.class)
         }
         else{
           this.$message.error(res.msg)
@@ -262,16 +263,18 @@ export default {
             stype: type,
             etype: 1,
             date: this.date,
-            kweek: this.weekArray[new Date(this.date).getDay()]
+            kweek: this.weekArray[new Date(this.date).getDay()],
+            v_cname: this.class
           }
         }).then(res =>　{
           if(res.status=== 'success'){
             this.disabled = true
-            console.log(this.disabled)
+            console.log(this.disabled, res.data)
             if(this.type === 1) {
               this.$message.warning('迟到，签到成功！')
             }else{
               this.$message.success('签到成功！')
+              // handleCommand()
             }
           }else{
             this.$message.info(res.msg)
@@ -283,6 +286,19 @@ export default {
       })
     },
     handleCommand() {
+      // this.$ajax({
+      //   url: '/stu/total_kq',
+      //   data: {
+      //     v_sno: sessionStorage.getItem('uname'),
+      //     v_cname: this.class
+      //   }
+      // }).then(res => {
+      //   if(res.status === 'success') {
+      //     console.log(res.data)
+      //   }
+      // }).then(err => {
+      //   console.log(err)
+      // })
       this.$router.push('/checkIn')
     },
     qiandao() {
@@ -361,11 +377,13 @@ export default {
         data: {
           // id: this.id,
           sno: sessionStorage.getItem('uname'),
+          v_cname: this.class,
           etype: type,
           etime: this.time,
         }
       }).then(res =>　{
-        if(res.status=== 'success'){
+        if(res.status === 'success'){
+          console.log(res.data)
           this.disabled2 = true
           if(type === 1) {
             this.$message.warning('早退，签到成功！')
