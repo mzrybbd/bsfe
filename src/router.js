@@ -47,22 +47,27 @@ export default new Router({
         {
           path: 'class_manager',
           name: 'class_manager',
-          component: () => import(/* webpackChunkName: "checkIn" */ './components/teacher/chirdren/class_manager.vue')
+          component: () => import(/* webpackChunkName: "class_manager" */ './components/teacher/chirdren/class_manager.vue')
+        },
+        {
+          path: 'score_manager',
+          name: 'score_manager',
+          component: () => import(/* webpackChunkName: "score_manager" */ './components/teacher/chirdren/score_manager.vue')
         },
         {
           path: 'kq_manager',
           name: 'kq_manager',
-          component: () => import(/* webpackChunkName: "checkIn" */ './components/teacher/chirdren/kq_manager.vue')
+          component: () => import(/* webpackChunkName: "kq_manager" */ './components/teacher/chirdren/kq_manager.vue')
         },
         {
           path: 'coursetable_manager',
           name: 'coursetable_manager',
-          component: () => import(/* webpackChunkName: "experiment" */ './components/teacher/chirdren/coursetable_manager.vue')
+          component: () => import(/* webpackChunkName: "coursetable_manager" */ './components/teacher/chirdren/coursetable_manager.vue')
         },
         {
           path: 'expriment_manager',
           name: 'expriment_manager',
-          component: () => import(/* webpackChunkName: "coursetable" */ './components/teacher/chirdren/expriment_manager.vue')
+          component: () => import(/* webpackChunkName: "expriment_manager" */ './components/teacher/chirdren/expriment_manager.vue')
         },
         {
           path: 'message_manager',
@@ -72,7 +77,7 @@ export default new Router({
         {
           path: 'person_info',
           name: 'person_info',
-          component: () => import(/* webpackChunkName: "personalCenter" */ './components/teacher/chirdren/person_info.vue')
+          component: () => import(/* webpackChunkName: "person_info" */ './components/teacher/chirdren/person_info.vue')
         }
       ]
     },

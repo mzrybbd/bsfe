@@ -34,8 +34,8 @@
 		      </el-menu-item>
 		      <el-submenu index="3">
 		        <template slot="title">实验管理</template>
-            <el-menu-item index="3-1">上传文件</el-menu-item>
-            <el-menu-item index="3-2">实验记录</el-menu-item>
+            <el-menu-item index="3-1">实验管理</el-menu-item>
+            <el-menu-item index="3-2">实验成绩</el-menu-item>
             <el-menu-item index="3-3">学生记录</el-menu-item>
 		      </el-submenu>
 		      <el-menu-item index="4">
@@ -87,6 +87,9 @@
             break;
           case '3-1':
             this.$router.push('/teacher/expriment_manager');
+            break;
+          case '3-2':
+            this.$router.push('/teacher/score_manager');
             break;
           case '4':
             this.$router.push('/teacher/message_manager');

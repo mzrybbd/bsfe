@@ -2,10 +2,10 @@
 	<div>
     <el-form :inline="true" class="demo-form-inline" :model="form">
        <el-form-item>
-          <el-input v-model="search" size="small" prefix-icon="el-icon-search" placeholder="请输入工号或姓名或班级" clearable></el-input>
+          <el-input v-model="search"  prefix-icon="el-icon-search" placeholder="请输入工号或姓名或班级" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="handleAdd">新增学生</el-button>
+          <el-button type="primary" @click="handleAdd">新增学生</el-button>
         </el-form-item>
         <el-form-item>
           <el-select
@@ -13,7 +13,6 @@
             multiple
             filterable
             allow-create
-            size="small"
             default-first-option
             placeholder="全部班级">
             <el-option
@@ -25,16 +24,16 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="cname" size="small"  placeholder="请输入修改后的班级名称" clearable @keyup.enter.native="updateClass()"></el-input>
+          <el-input v-model="cname"   placeholder="请输入修改后的班级名称" clearable @keyup.enter.native="updateClass()"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="addClass('form')">添加班级</el-button>
+          <el-button size="small" type="primary" @click="addClass('form')">添加班级</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="deleteClass('form')">删除班级</el-button>
+          <el-button size="small" type="primary" @click="deleteClass('form')">删除班级</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="updateClass()">更新班级</el-button>
+          <el-button size="small" type="primary" @click="updateClass()">更新班级</el-button>
         </el-form-item>
     </el-form>
     <create_user ref="create_user" @create="update"></create_user>
@@ -266,6 +265,7 @@
           this.$ajax({
             url: "/teacher/stu",
             data: {
+              str: 'select * from stu where cname in (select cname from class where tno=?)',
               tno: sessionStorage.getItem('uname')
             }
           }).then(res => {

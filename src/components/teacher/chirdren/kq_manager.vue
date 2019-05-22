@@ -388,7 +388,7 @@
           data: {
             tno: sessionStorage.getItem('uname'),
             stime: this.startTime,
-            cname: this.class
+            cname: this.sj_kq.sj_cname
           }
         }).then(res =>{
           if(res.status === 'success' && res.data.length) {
@@ -404,7 +404,7 @@
               data: {
                 stime: this.startTime,
                 etime: this.startTime,
-                cname: '软工153班'
+                cname: this.sj_kq.sj_cname
               }
             }).then(res =>{
               console.log(this.sj_kq.sj_cname,this.startTime)
@@ -484,6 +484,7 @@
             break;
           default:
             this.timeFlag = true
+            this.startTime = this.value[0]
         }
       },
       total_kq() {
@@ -560,6 +561,11 @@
         })
       },
       query2() {
+        if(this.timeFlag) {
+          this.startTime = this.value[0]
+        }
+        console.log(this.startTime)
+
         this.$nextTick(function() {
           this.$ajax({
             url: '/teacher/kq_sj',
@@ -569,6 +575,7 @@
               etime: this.startTime,
             }
           }).then(res => {
+            console.log(this.startTime)
             if(res.status === 'success') {
               this.tableData1 = res.data
               console.log(this.tableData1, this.startTime)
