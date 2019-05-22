@@ -446,6 +446,7 @@ export default {
   width: 960px;
   background: #eee;
   margin: 0 auto;
+  height: 800px;
 }
 .footer {
   margin: auto;

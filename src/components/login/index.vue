@@ -244,6 +244,7 @@
             this.loading = true
           //登录
             this.$ajax({
+              timeOut: 2000,
               url: "/user/login",
               data: {
                 uid: this.ruleForm.name
@@ -252,6 +253,7 @@
                 if(res.status === "error") {
                   this.$message.error(res.msg);
                   console.log(res)
+                  this.loading = false
                 }else {
                   if(res.data.upwd == this.ruleForm.pass) {
                     this.$message.success("登录成功")
@@ -271,6 +273,7 @@
                         this.$router.push('/')
                     }
                   }else {
+                    this.loading = false
                     this.$message.error("用户名或密码错误!");
                   }
                 }

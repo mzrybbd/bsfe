@@ -30,8 +30,8 @@
           </el-form-item>
         </el-form>
       </div>
-  </el-card>
-      <el-card class="box-card">
+    </el-card>
+    <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>修改密码</span>
         <el-button style="float: right; padding: 3px 0" type="text" @click="updatePass('teacher')">保存修改</el-button>
@@ -49,7 +49,7 @@
           </el-form-item>
         </el-form>
       </div>
-  </el-card>
+    </el-card>
   </div>
 </template>
 
