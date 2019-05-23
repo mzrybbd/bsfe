@@ -7,7 +7,7 @@
         <el-form-item>
           <el-button type="primary" @click="handleAdd">新增学生</el-button>
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
           <el-select
             v-model="form.cname"
             multiple
@@ -34,7 +34,7 @@
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" @click="updateClass()">更新班级</el-button>
-        </el-form-item>
+        </el-form-item> -->
     </el-form>
     <create_user ref="create_user" @create="update"></create_user>
     <create_user ref="update_user" @update="update"></create_user>
@@ -152,7 +152,7 @@
               this.getData()
             }
           }).catch(err => {
-            this.message.error('更新失败')
+            this.$message.error('更新失败')
           })
        }
      },
@@ -176,7 +176,7 @@
                 this.getData()
               }
               }).catch(err => {
-                this.$message.err('添加班级失败')
+                this.$message.error('添加班级失败')
               })
             }
           }
@@ -209,7 +209,7 @@
                 this.getData()
               }
               }).catch(err => {
-                this.$message.err('删除班级失败')
+                this.$message.error('删除班级失败')
               })
             }
             this.$message({

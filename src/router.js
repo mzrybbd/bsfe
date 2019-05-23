@@ -45,6 +45,11 @@ export default new Router({
       component: () => import(/* webpackChunkName: "teacher" */ './components/teacher/index.vue'),
       children: [
         {
+          path: 'introduction',
+          name: 'introduction',
+          component: () => import(/* webpackChunkName: "introduction" */ './components/teacher/chirdren/introduction.vue')
+        },
+        {
           path: 'class_manager',
           name: 'class_manager',
           component: () => import(/* webpackChunkName: "class_manager" */ './components/teacher/chirdren/class_manager.vue')

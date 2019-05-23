@@ -75,7 +75,7 @@
         options: [],
         rules: {
           uid: [
-          	{ required: true, message:'请输入学号', trigger: 'blur' },
+            { required: true, message:'请输入学号', trigger: 'blur' },
           	{ min: 10, max: 15, message: '长度在10到15个字符', trigger: 'blur' }
           ],
           name: [

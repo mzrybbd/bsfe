@@ -1,7 +1,7 @@
 <template>
       <div>
           <!-- 图片上传组件辅助-->
-        <el-upload
+        <!-- <el-upload
           class="avatar-uploader"
           :action="serverUrl"
           name="file"
@@ -13,7 +13,7 @@
           :on-error="uploadError"
           :before-upload="beforeUpload">
         </el-upload>
-        <el-button size="small" type="primary">点击上传</el-button>
+        <el-button size="small" type="primary">点击上传</el-button> -->
 
         <quill-editor
         class="editor"

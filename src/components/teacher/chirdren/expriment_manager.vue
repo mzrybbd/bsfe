@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-form :inline="true"  class="demo-form-inline">
+    <!-- <el-form :inline="true"  class="demo-form-inline">
       <el-form-item label="实验次数">
         <el-input-number v-model="num" :min="1" :max="5" label="请输入实验总次数"></el-input-number>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">创建实验</el-button>
       </el-form-item>
-       <!-- <el-form-item>
+       <el-form-item>
         <el-input v-model="exp_name" placeholder="请输入实验名字"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addExp">添加实验</el-button>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-select
           v-model="name"
@@ -29,8 +29,8 @@
       <el-form-item>
         <el-button type="primary" @click="delExp">删除实验</el-button>
       </el-form-item>
-    </el-form>
-      <el-upload
+    </el-form> -->
+    <el-upload
       class="upload-demo"
       action="http://localhost:3000/teacher/uploadFile"
       :on-preview="handlePreview"
@@ -41,9 +41,9 @@
       :on-exceed="handleExceed"
       :file-list="fileList" ref="elupload">
       <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
     </el-upload>
-    <a href="http://localhost:3000/teacher/downloadFile?filename='15cf6daeb6ac93052ef8c150a753dcb0.jpg'&oldname='cat.jpg'">wenjian</a>
+    <!-- <a href="http://localhost:3000/teacher/downloadFile?filename='15cf6daeb6ac93052ef8c150a753dcb0.jpg'&oldname='cat.jpg'">wenjian</a> -->
   </div>
 </template>
 
@@ -59,7 +59,8 @@ export default {
       num: 1,
       expName: [],
       options: [],
-      name: ''
+      name: '',
+      hanzi:['0', '一','二','三','四','五']
     }
   },
   mounted(){
@@ -131,7 +132,7 @@ export default {
     onSubmit(){
       console.log(this.num)
       for(let i=1; i<=this.num; i++) {
-        this.expName[i] = '实验' + i
+        this.expName[i] = '实验' + this.hanzi[i]
       
         this.$ajax({
           url: '/teacher/add_exp',

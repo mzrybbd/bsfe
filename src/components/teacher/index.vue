@@ -15,7 +15,7 @@
 		  <el-container class="container">
 		    <el-aside width="220px">
 		    	<el-menu
-		      default-active="1"
+		      default-active="0"
 		      class="el-menu-vertical-demo"
 		      @open="handleOpen"
 		      @close="handleClose"
@@ -23,9 +23,12 @@
 		      text-color="#fff"
 		      active-text-color="#ffd04b"
 		      @select="handleSelect">
+          <el-menu-item index="0">
+		        <span slot="title">实验设置</span>
+		      </el-menu-item>
 		      <el-submenu index="1">
 		        <template slot="title">班级管理</template>
-            <el-menu-item index="1-1">班级管理</el-menu-item>
+            <el-menu-item index="1-1">学生管理</el-menu-item>
             <el-menu-item index="1-2">班级考勤</el-menu-item>
             <el-menu-item index="1-3">班级学情</el-menu-item>
 		      </el-submenu>
@@ -76,6 +79,9 @@
 		methods: {
 			handleSelect(key, keyPath){    
         switch(key){
+          case '0':
+            this.$router.push('/teacher/introduction')
+            break;
           case '1-1':
             this.$router.push('/teacher/class_manager');
             break;

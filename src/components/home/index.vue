@@ -299,7 +299,7 @@ export default {
       // }).then(err => {
       //   console.log(err)
       // })
-      this.$router.push('/checkIn')
+      this.$router.push('/personalCenter')
     },
     qiandao() {
       this.checkLogin()

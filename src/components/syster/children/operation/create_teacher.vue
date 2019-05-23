@@ -76,9 +76,9 @@ export default {
         tno: '',
         tname: '',
         sex: '女',
-        email: '',
-        phone: '',
-        address: ''
+        email: '4@qq.com',
+        phone: '13474229060',
+        address: '学院楼5楼'
       },
       formLabelWidth: '120px',
       rules: {

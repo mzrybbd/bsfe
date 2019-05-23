@@ -2,10 +2,10 @@
   <div>
     <el-form :inline="true" class="demo-form-inline" :model="form">
       <el-form-item>
-        <el-input v-model="search" size="small" prefix-icon="el-icon-search" placeholder="请输入班级或日期或时间" clearable></el-input>
+        <el-input v-model="search"  prefix-icon="el-icon-search" placeholder="请输入班级或日期或时间" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button size="mini" type="primary" @click="handleAdd">新增课表</el-button>
+        <el-button type="primary" @click="handleAdd">新增课表</el-button>
       </el-form-item>
     </el-form>
     <create_ct ref="create_ct" @create="update"></create_ct>

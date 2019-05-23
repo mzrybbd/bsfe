@@ -96,6 +96,7 @@
               uname: row.sno
             }
           }).then(res => {
+            console.log(row.sno)
             rows.splice(index, 1)
           }).catch(err => {
             console.log(err)

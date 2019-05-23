@@ -6,7 +6,7 @@
           <el-form-item>
             <el-input v-model="search"  prefix-icon="el-icon-search" placeholder="请输入学号或姓名或班级或日期" clearable></el-input>
           </el-form-item>
-          <el-form-item label="上课时间" prop="time">
+          <!-- <el-form-item label="上课时间" prop="time">
             <el-select v-model="time" @change="change" placeholder="请选择">
               <el-option
                 v-for="item in times"
@@ -31,14 +31,22 @@
           </el-form-item>
           <el-form-item>
             <el-button  type="primary" @click="query2">查询考勤</el-button>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button  type="primary" @click="tongji">考勤统计</el-button>
           </el-form-item>
-        <p>应到人数： {{sj_kq.total_num}}，实到人数：{{sj_kq.true_num}}，缺勤人数：{{sj_kq.absence_num}}，迟到人数：{{sj_kq.late_num}}，早退人数：{{sj_kq.early_num}}，迟到早退人数：{{sj_kq.late_early_num}}，正常人数：{{sj_kq.normal_num}}</p>
-        缺勤名单为：<span v-for="item in sno_list">{{item.sname+'_'+item.sno+','}}</span>
+         <div>
+          <div v-if="flagInfo">
+            <p>应到人数： {{sj_kq.total_num}}，实到人数：{{sj_kq.true_num}}，缺勤人数：{{sj_kq.absence_num}}，迟到人数：{{sj_kq.late_num}}，早退人数：{{sj_kq.early_num}}，迟到早退人数：{{sj_kq.late_early_num}}，正常人数：{{sj_kq.normal_num}}</p>
+            缺勤名单为：<span  v-for="item in sno_list">{{item.sname+'_'+item.sno+','}}</span>
+          </div>
+          <div v-else>
+            <h3 style="color:red">现在没有课程!!</h3>
+          </div>
+          </div>
         </el-form>
          <el-table
+         v-show="flagInfo"
           height="500"
           ref="filterTable"
           :data="tableData1.filter(data => !search || data.date.toLowerCase().includes(search.toLowerCase()) || data.sno.toLowerCase().includes(search.toLowerCase()) || data.sname.toLowerCase().includes(search.toLowerCase()) || data.cname.toLowerCase().includes(search.toLowerCase()))">
@@ -312,6 +320,30 @@
           </el-table-column> -->
         </el-table>
       </el-tab-pane>
+      <!-- <el-tab-pane label="考勤规则" name="forth">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>考勤规则</span>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="update()">操作按钮</el-button>
+          </div>
+          <div>
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+              <el-form-item label="迟到扣分" prop="late_score">
+                <el-input  v-model.number="ruleForm.late_score" type='text'></el-input>
+              </el-form-item>
+              <el-form-item label="早退扣分" prop="early_score">
+                <el-input  v-model.number="ruleForm.early_score" type='text'></el-input>
+              </el-form-item>
+              <el-form-item label="迟到早退扣分" prop="late_early_score">
+                <el-input  v-model.number="ruleForm.late_early_score" type='text'></el-input>
+              </el-form-item>
+              <el-form-item label="缺勤扣分" prop="absence_score">
+                <el-input  v-model.number="ruleForm.absence_score" type='text'></el-input>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-card>
+      </el-tab-pane> -->
     </el-tabs>
     
 	</div>
@@ -323,6 +355,7 @@
     components:　{ create_user },
     data() {
       return {
+        ruleForm: {},
         search1: '',
         sj_kq: {},
         value: [new Date(2016, 9, 10, 14), new Date(2016, 9, 10, 15, 50)],
@@ -338,6 +371,24 @@
         date: '',
         search: '',
         time: '',
+        rules:{
+          late_score:[
+            { required: true, message: '请输入工号', trigger: 'change' },
+            { type: 'number', message: '只能输入数字', trigger: 'blur' },
+          ],
+          early_score:[
+            { required: true, message: '请输入工号', trigger: 'change' },
+            { type: 'number', message: '只能输入数字', trigger: 'blur' },
+          ],
+          late_early_score:[
+            { required: true, message: '请输入工号', trigger: 'change' },
+            { type: 'number', message: '只能输入数字', trigger: 'blur' },
+          ],
+          absence_score:[
+            { required: true, message: '请输入工号', trigger: 'change' },
+            { type: 'number', message: '只能输入数字', trigger: 'blur' },
+          ],
+        },
         times: [
           {label: '8:00 ~ 9:50（1、2节）', value: '1'}, 
           {label: '10:10 ~ 12:00（3、4节）', value: '2'}, 
@@ -352,13 +403,15 @@
         etypeArray: ['正常','早退'],
         startTime: '',
         endTime: '',
-        sno_list: []
+        sno_list: [],
+        flagInfo: false
       }
     },
     mounted(){
       this.getData()
       this.total_kq()
       this.getList()
+      this.tongji()
     },
     methods: {
       reset(formName) {
@@ -387,16 +440,20 @@
           url: '/teacher/sj_kq',
           data: {
             tno: sessionStorage.getItem('uname'),
-            stime: this.startTime,
-            cname: this.sj_kq.sj_cname
+            // stime: this.startTime,
+            // cname: this.sj_kq.sj_cname
           }
         }).then(res =>{
           if(res.status === 'success' && res.data.length) {
+            this.flagInfo = true
             this.sj_kq = res.data[0]
-            console.log(res.data[0])
+            this.startTime = res.data[0].v_stime
+            this.query2()
+            console.log(res.data[0],this.startTime)
           }
           else if(res.status === 'success' && !res.data.length){
             this.$message.info('现在没有课程')
+            this.flagInfo = false
           }
         }).then(() => {
           this.$ajax({
@@ -410,7 +467,7 @@
               console.log(this.sj_kq.sj_cname,this.startTime)
               if(res.status === 'success') {
                 this.sno_list = res.data
-                console.log(this.sno_list[0].sname+'_'+this.sno_list[0].sno,this.sno_list)
+                console.log(this.sno_list)
               }
             }).catch(err => {
               console.log(err)
@@ -561,10 +618,10 @@
         })
       },
       query2() {
-        if(this.timeFlag) {
-          this.startTime = this.value[0]
-        }
-        console.log(this.startTime)
+        // if(this.timeFlag) {
+        //   this.startTime = this.value[0]
+        // }
+        // console.log(this.startTime)
 
         this.$nextTick(function() {
           this.$ajax({
