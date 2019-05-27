@@ -151,7 +151,7 @@ export default {
     },
     reset(name) {
       this.$refs[name].resetFields()
-      this.form.address='机房3层'
+      this.form.address='机房三层南'
     },
   	getList() {
       this.$ajax({

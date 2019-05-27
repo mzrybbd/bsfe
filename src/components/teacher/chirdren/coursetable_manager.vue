@@ -7,6 +7,9 @@
       <el-form-item>
         <el-button type="primary" @click="handleAdd">新增课表</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-checkbox v-model="check" @change="getData">过滤已经完成的课程</el-checkbox>
+      </el-form-item>
     </el-form>
     <create_ct ref="create_ct" @create="update"></create_ct>
     <update_ct ref="update_ct" @update="update"></update_ct>
@@ -70,6 +73,7 @@ export default {
       tableData: [],
       search:　'',
       form: {},
+      check: true,
     }
   },
   mounted() {
@@ -77,8 +81,15 @@ export default {
   },
   methods: {
     getData() {
+      let url = ''
+      if(this.check){
+        url = "/teacher/search2"
+      }
+      else{
+        url = "/teacher/search"
+      }
       this.$ajax({
-        url: "/teacher/search",
+        url: url,
         data: {
           tno: sessionStorage.getItem('uname')
         }

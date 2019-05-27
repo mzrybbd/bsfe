@@ -47,11 +47,11 @@
           <div slot="header" class="clearfix">
             <span>考勤规则</span>
             <el-tooltip placement="top">
-              <div slot="content">全部输入后回车保存提交</div>
+              <div slot="content">全部输入后回车保存提交<br />考勤占比为0-100</div>
               <el-button style="float: right; padding: 3px 0">操作说明</el-button>
             </el-tooltip>
           </div>
-          <div>
+          <div> 
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
               <el-form-item label="迟到扣分" prop="late_score">
                 <el-input  v-model.number="ruleForm.late_score" type='text' @keyup.enter.native="save('ruleForm')"></el-input>
@@ -64,6 +64,9 @@
               </el-form-item>
               <el-form-item label="缺勤扣分" prop="absence_score">
                 <el-input  v-model.number="ruleForm.absence_score" type='text' @keyup.enter.native="save('ruleForm')"></el-input>
+              </el-form-item>
+              <el-form-item label="考勤占比" prop="kq_rate">
+                <el-input  v-model.number="ruleForm.kq_rate" type='text' @keyup.enter.native="save('ruleForm')"></el-input>
               </el-form-item>
             </el-form>
           </div>
@@ -147,6 +150,10 @@ export default {
           { required: true, message: '请输入缺勤扣分', trigger: 'change' },
           { type: 'number', message: '只能输入数字', trigger: 'blur' },
         ],
+        kq_rate:[
+          { required: true, message: '请输入考勤占比', trigger: 'change' },
+          { type: 'number', message: '只能输入数字', trigger: 'blur' },
+        ],
       },
     }
   },
@@ -205,6 +212,7 @@ export default {
       .then(res => {
         if(res.status === 'success')
           this.ruleForm = res.data[0];
+          console.log(this.ruleForm)
        })
       .catch(err => {
         console.log(err);
@@ -300,6 +308,7 @@ export default {
         }).then(res => {
           if(res.status === 'success'){
             this.getList()
+            this.$message.success('添加成功！')
             console.log(res.data)
           }
         }).catch(err => {

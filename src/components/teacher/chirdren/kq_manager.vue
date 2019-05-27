@@ -1,6 +1,6 @@
 <template>
 	<div>
-    <el-tabs v-model="activeName" type="border-card">
+    <el-tabs v-model="activeName" type="border-card" @tab-click="init">
       <el-tab-pane label="实时考勤" name="first">
         <el-form :inline="true" class="demo-form-inline">
           <el-form-item>
@@ -287,25 +287,40 @@
           </el-table-column>
           <el-table-column
             prop="total_num"
+            sortable
             label="应签次数">
           </el-table-column>
           <el-table-column
             prop="late_num"
+            sortable
             label="迟到次数"
           >
           </el-table-column>
           <el-table-column
             prop="early_num"
+            sortable
             label="早退次数"
+          ></el-table-column>
+          <el-table-column
+            prop="late_early_num"
+            sortable
+            label="迟到早退"
           >
           </el-table-column>
           <el-table-column
             prop="absence_num"
+            sortable
             label="缺勤次数">
           </el-table-column>
           <el-table-column
             prop="normal_num"
+            sortable
             label="正常次数">
+          </el-table-column>
+          <el-table-column
+            prop="kq_score"
+            sortable
+            label="考勤成绩">
           </el-table-column>
           <!-- <el-table-column label="操作">
             <template slot-scope="scope">
@@ -414,6 +429,12 @@
       this.tongji()
     },
     methods: {
+      init(){
+        this.getData()
+        this.total_kq()
+        this.getList()
+        this.tongji()
+      },
       reset(formName) {
         this.getData()
         this.form={}
