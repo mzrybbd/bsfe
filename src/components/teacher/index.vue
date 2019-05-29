@@ -26,12 +26,19 @@
           <el-menu-item index="0">
 		        <span slot="title">实验设置</span>
 		      </el-menu-item>
+          <el-menu-item index="1-1">
+		        <span slot="title">学生管理</span>
+		      </el-menu-item>
+          <el-menu-item index="1-2">
+		        <span slot="title">考勤管理</span>
+		      </el-menu-item>
+<!--           
 		      <el-submenu index="1">
-		        <template slot="title">班级管理</template>
+		        <template slot="title">学生管理</template>
             <el-menu-item index="1-1">学生管理</el-menu-item>
             <el-menu-item index="1-2">班级考勤</el-menu-item>
             <el-menu-item index="1-3">班级学情</el-menu-item>
-		      </el-submenu>
+		      </el-submenu> -->
 		      <el-menu-item index="2">
 		        <span slot="title">课表管理</span>
 		      </el-menu-item>
@@ -96,6 +103,9 @@
             break;
           case '3-2':
             this.$router.push('/teacher/score_manager');
+            break;
+          case '3-3':
+            this.$router.push('/teacher/expriment_record');
             break;
           case '4':
             this.$router.push('/teacher/message_manager');

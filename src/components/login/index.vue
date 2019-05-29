@@ -270,7 +270,7 @@
                         this.$router.push('/teacher')
                         break
                       default:
-                        this.$router.push('/')
+                        this.$router.push('/index')
                     }
                   }else {
                     this.loading = false

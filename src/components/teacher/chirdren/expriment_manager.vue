@@ -1,156 +1,201 @@
 <template>
   <div>
-    <!-- <el-form :inline="true"  class="demo-form-inline">
-      <el-form-item label="实验次数">
-        <el-input-number v-model="num" :min="1" :max="5" label="请输入实验总次数"></el-input-number>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">创建实验</el-button>
-      </el-form-item>
-       <el-form-item>
-        <el-input v-model="exp_name" placeholder="请输入实验名字"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="addExp">添加实验</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-select
-          v-model="name"
-          default-first-option
-          placeholder="全部实验">
-          <el-option
-            v-for="item in options"
-            :key="item.name"
-            :label="item.name"
-            :value="item.name">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="delExp">删除实验</el-button>
-      </el-form-item>
-    </el-form> -->
-    <el-upload
-      class="upload-demo"
-      action="http://localhost:3000/teacher/uploadFile"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      :before-remove="beforeRemove"
-      multiple
-      :limit="3"
-      :on-exceed="handleExceed"
-      :file-list="fileList" ref="elupload">
-      <el-button size="small" type="primary">点击上传</el-button>
-      <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-    </el-upload>
-    <!-- <a href="http://localhost:3000/teacher/downloadFile?filename='15cf6daeb6ac93052ef8c150a753dcb0.jpg'&oldname='cat.jpg'">wenjian</a> -->
+    <el-form>
+      <el-upload
+        class="upload-demo"
+        :action=src
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        :on-progress="handleProgress"
+        multiple
+        :on-success="handleSuccess"
+        :limit="10"
+        :before-upload="beforeUpload"
+        :show-file-list="false"
+        :on-error="handleError"
+        :on-exceed="handleExceed"
+        :file-list="fileList" ref="elupload">
+        <el-button size="small" type="primary" @click="upload">点击上传</el-button>
+      </el-upload>
+    </el-form>
+    <!-- <a href="http://10.1.2.106:3000/teacher/downloadFile?filename=./uploads/2015012000/壁纸.jpg">wenjian</a> -->
+<!--  
+ {{tableData}}
+    <div>
+      <ul v-for="item in tableData">
+        <a :href="item.path">{{item.name}}</a>
+      </ul>
+    </div> -->
+  <el-table
+      height="500"
+	    ref="filterTable"
+	    :data="tableData">
+      <el-table-column
+	      prop="name"
+	      label="文件名"
+        >
+	    </el-table-column>
+	    <el-table-column
+	      prop="size"
+	      label="文件大小"
+	    >
+      </el-table-column>
+      <el-table-column
+	      prop="time"
+	      label="上传时间"
+	    >
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">点击下载</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click.native.prevent="handleDelete(scope.$index, scope.row, tableData)">点击删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
-import dowloadUtil from '../../../lib/config.js'
 export default {
   data() {
     return {
-      exp_name:'',
+      tableData: [],
       fileList: [],
-      filename: '15cf6daeb6ac93052ef8c150a753dcb0.jpg',
-      oldname: 'cat.jpg',
-      num: 1,
-      expName: [],
-      options: [],
-      name: '',
-      hanzi:['0', '一','二','三','四','五']
+      src: 'http://localhost:3000/teacher/uploadFile?tno=' + sessionStorage.getItem('uname')
     }
   },
   mounted(){
     this.getList()
   },
   methods: {
+    getList() {
+      this.$ajax({
+        url: 'teacher/allFile',
+        data: {
+          tno: './uploads/'+sessionStorage.getItem('uname')
+        }
+      }).then(res => {
+        if(res.status === 'success') {
+          this.tableData = res.data
+        }
+        console.log(res.data)
+      })
+    },
     handlePreview() {
-      dowloadUtil(`${process.env.BASE_API}/teacher/downloadFile?filename=${filename}&oldname=${oldname}`);
+      // dowloadUtil(`${process.env.BASE_API}/teacher/downloadFile?filename=f9bf3e4df7762d7ba44883fd66bd61fa.PNG&oldname=1.PNG`);
+    },
+    handleEdit(index, row) {
+      let url = "http://localhost:3000/teacher/downloadFile?filename="+row.path
+      console.log(url)
+      this.downloadUrl(url)
+    },
+    handleDelete(index, row, rows) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$ajax({
+            url: '/teacher/delFile',
+            data: {
+              url: row.path
+            }
+          }).then(res => {
+            if(res.status === 'success')
+              rows.splice(index, 1)
+          }).catch(err => {
+            console.log(err)
+          })
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        })
+      },
+    downloadUrl(url){
+      let iframe = document.createElement('iframe');
+      iframe.style.display = 'none'
+      iframe.src = url
+      iframe.onload = function () {
+        document.body.removeChild(iframe)
+      }
+      document.body.appendChild(iframe)
     },
     handleRemove() {
 
     },
-    handleExceed() {
-
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     beforeRemove() {
 
     },
-
-    getList() {
-      this.$ajax({
-        url: "/teacher/exp_one",
-        data: {
-          tno: sessionStorage.getItem('uname')
-        }
-      })
-      .then(res => {
-        this.options = res.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    handleError(err, file, fileList) {
+      // this.tempArr.forEach((element, index) => {
+      //   if (element.uid === file.uid) {
+      //     this.tempArr.splice(index, 1); // 上传失败删除该记录
+      //     this.$message.error('文件上传失败');
+      //     this.$emit('changeFileList', this.tempArr);
+      //   }
+      // });
     },
-    addExp() {
-      this.$ajax({
-        url: '/teacher/add_exp',
-        data: {
-          tno: sessionStorage.getItem('uname'),
-          name: this.exp_name
-        }
-      }).then(res => {
-        if(res.status === 'success'){
-          this.getList()
-          this.$message.success('添加成功')
-          console.log(res.data)
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+    objAddItem(tempArr, file) {
+      const tempObj = {
+        uid: file.uid, // uid用于辨别文件
+        originalName: file.name, // 列表显示的文件名
+        progress: 0, // 进度条
+        code: 200, // 上传状态
+      };
+      tempArr.push(tempObj);
+      this.$emit('changeFileList', tempArr);
     },
-    delExp() {
-      this.$ajax({
-        url: '/teacher/exp_del',
-        data: {
-          tno: sessionStorage.getItem('uname'),
-          name: this.name
-        }
-      }).then(res => {
-        if(res.status === 'success'){
-          this.getList()
-          console.log(res.data)
-          this.$message.success('删除成功')
-
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+    handleProgress(event, file, fileList){
+      // this.tempArr.forEach((element, index)=>{
+      //   if(element.uid === file.uid){
+      //     const progress = Math.floor(event.percent)
+      //     element.progress = progress === 100 ? 99 : progress;
+      //   this.$set(this.tempArr, index, element);
+      //   this.$emit('changeFileList', this.tempArr);
+      //   }
+      // })
     },
-    onSubmit(){
-      console.log(this.num)
-      for(let i=1; i<=this.num; i++) {
-        this.expName[i] = '实验' + this.hanzi[i]
-      
-        this.$ajax({
-          url: '/teacher/add_exp',
-          data: {
-            tno: sessionStorage.getItem('uname'),
-            name: this.expName[i]
+    beforeUpload(file){
+      console.log(file)
+      let fd = new FormData();
+      fd.append('tno', sessionStorage.getItem('uname'))
+      this.$ajax({
+        url:'/teacher/uploadFile',
+        data:fd,
+         onUploadProgress(progressEvent){
+            if (progressEvent.lengthComputable) {
+              let val = (progressEvent.loaded / progressEvent.total * 100).toFixed(0);
+              that.formData.showProgress = true;
+              that.formData.startValue = parseInt(val)
+            }
           }
-        }).then(res => {
-          if(res.status === 'success'){
-            this.getList()
-            console.log(res.data)
-          }
-        }).catch(err => {
-          console.log(err)
-        })
-      }
-    }
-    
+      }).then(res =>{
+        console.log(fd)
+        // this.$message.success('上传成功')
+      })
+    },
+    handleSuccess(res, file, fileList) {
+      this.getList()
+      this.$message.success('上传成功')
+    },
+    upload(){
+
+    },    
   }
 }
 </script>

@@ -120,7 +120,76 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="实验管理">实验管理</el-tab-pane>
+      <el-tab-pane label="成绩管理">
+        <div>
+          <div v-if="show">教师端未开启
+            <el-table
+              height="500"
+              :data="tableData3">
+              <el-table-column
+                prop="sno"
+                label="学号"
+                sortable>
+              </el-table-column>
+              <el-table-column
+                prop="sname"
+                label="姓名"
+              ></el-table-column>
+              <el-table-column
+                prop="cname"
+                label="班级"
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp1'
+                label='实验一'
+                sortable            
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp2'
+                label='实验二'
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp3'
+                label='实验三'
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp4'
+                label='实验四'
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp5'
+                label='实验五'
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                prop='avg_score'
+                label='实验成绩'
+              >
+              </el-table-column>
+              <el-table-column
+                prop='kq_score'
+                label='考勤成绩'
+              >
+              </el-table-column>
+              <el-table-column
+                prop='final_score'
+                label='最终成绩'
+              >
+              </el-table-column>
+            </el-table>
+          </div>
+          <div v-else  style="color: red;">教师端未开启</div>
+        </div>
+      </el-tab-pane>
   </el-tabs>
   </div>
 </template>
@@ -148,6 +217,8 @@ export default {
       }
     };
     return {
+      tableData3: [],
+      show: false,
       tabPosition: 'left',
       stypeArray: ['正常','迟到'],
       etypeArray: ['正常','早退'],
@@ -202,8 +273,24 @@ export default {
     this.getStudent()
     this.getList()
     this.getKq_table()
+    this.getScore()
   },
 	methods: {
+    getScore() {
+      this.$ajax({
+          url: "/teacher/scoreOne",
+          data: {
+            sno: sessionStorage.getItem('uname')
+          }
+        }).then(res => {
+         if(res.status === 'success'){
+           this.tableData3 = res.data
+           console.log(this.tableData3)
+         }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
     filterStype(value, row) {
       return this.stypeArray[row.stype] === value;
     },
@@ -274,6 +361,32 @@ export default {
       })
       .then(res => {
         this.options = res.data;
+      }).then(res =>{
+        this.$ajax({
+          url: '/stu/tno',
+          data: {
+            sno:　sessionStorage.getItem('uname')
+          }
+        }).then(res => {
+          if(res.status === 'success'){
+            this.tno = res.data.tno
+          }
+        }).then(() => {
+            this.$ajax({
+          url: '/teacher/one',
+          data: {
+            tno: this.tno
+          }
+        }).then(res => {
+          if(res.status === 'success'){
+            console.log(res.data,res.data[0].status)
+            if(res.data[0].status){
+              this.show = true
+              console.log(res.data,res.data[0].status)
+            }
+          }
+        })
+        })
       })
       .catch(err => {
         console.log(err);

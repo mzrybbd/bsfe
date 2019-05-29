@@ -13,9 +13,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "home" */ './components/home/index.vue'),
       children: [
         {
-          path: 'checkIn',
-          name: 'checkIn',
-          component: () => import(/* webpackChunkName: "checkIn" */ './components/checkIn/index.vue')
+          path: 'index',
+          name: 'index',
+          component: () => import(/* webpackChunkName: "index" */ './components/home/chirdren/index.vue')
         },
         {
           path: 'experiment',
@@ -73,6 +73,11 @@ export default new Router({
           path: 'expriment_manager',
           name: 'expriment_manager',
           component: () => import(/* webpackChunkName: "expriment_manager" */ './components/teacher/chirdren/expriment_manager.vue')
+        },
+        {
+          path: 'expriment_record',
+          name: 'expriment_record',
+          component: () => import(/* webpackChunkName: "expriment_record" */ './components/teacher/chirdren/expriment_record.vue')
         },
         {
           path: 'message_manager',

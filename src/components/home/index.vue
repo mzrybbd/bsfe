@@ -3,11 +3,10 @@
     <el-container>
       <el-header class="header">
         <el-menu :default-active="this.$router.path" router mode="horizontal" class="menu" 
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b">
+          
+          active-text-color="#007fff">
            <el-menu-item>
-            <el-button type="text" icon="large iconfont icon-xueshimao-shi"> 计算机组成原理实验系统</el-button>
+            <el-button type="text" icon="large iconfont icon-xueshimao-shi" style="color: #007fff"> 计算机组成原理实验系统</el-button>
           </el-menu-item>
           <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">
             {{ item.navItem }}
@@ -36,7 +35,9 @@
         </el-menu>
       </el-header>
       <el-main class="main">
-        <transition name="el-fade-in"><router-view></router-view></transition>
+        <div class="container">
+          <transition name="el-fade-in" ><router-view></router-view></transition>
+        </div>
       </el-main>
       <el-footer class="footer">版权所有 &copy; 西北农林科技大学 2019 计算机组成原理实验系统</el-footer>
     </el-container>
@@ -48,9 +49,9 @@ export default {
   data() {
     return {
       navList:[
-        {name:'/',navItem:'首页'},
-        {name:'/experiment',navItem:'实验'},
+        {name:'/index',navItem:'首页'},
         {name:'/coursetable',navItem:'课表'},
+        {name:'/experiment',navItem:'实验'},
         {name:'/message',navItem:'消息'},
         {name:'/personalCenter',navItem:'个人中心'}
       ],
@@ -443,10 +444,15 @@ export default {
   background-color: #545c64;
 }
 .main {
-  width: 960px;
-  background: #eee;
+  width: 100%;
+  background: #fff;
   margin: 0 auto;
-  height: 800px;
+}
+.container{
+  width: 960px;
+  margin: 0 auto;
+  // height:800px;
+  background: #fff;
 }
 .footer {
   margin: auto;

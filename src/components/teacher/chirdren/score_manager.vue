@@ -186,6 +186,9 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="exportExcel2" style="margin-top: 2px;" size="medium" type="success" icon='iconfont icon-upload-demo'>导出</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox v-model="check" @change="changeStatus">是否允许学生端查看</el-checkbox>
           </el-form-item>  
         </el-form>
         <el-table
@@ -193,7 +196,7 @@
           ref="filterTable3"
           class="filterTable3"
           :data="tableData3.filter(data => !form3.search || data.sno.toLowerCase().includes(form3.search.toLowerCase()) || data.sname.toLowerCase().includes(form3.search.toLowerCase()) || data.cname.toLowerCase().includes(form3.search.toLowerCase()))">
-          <el-table-column
+          <!-- <el-table-column
             prop="sno"
             label="学号"
             sortable>
@@ -222,13 +225,74 @@
             label='最终成绩'
           >
           </el-table-column>
-          <el-table-column label="操作">
+           -->
+          <el-table-column
+                prop="sno"
+                label="学号"
+                width='100px'
+                sortable>
+              </el-table-column>
+              <el-table-column
+                prop="sname"
+                label="姓名"
+              ></el-table-column>
+              <el-table-column
+                prop="cname"
+                label="班级"
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp1'
+                label='实验一'
+                sortable            
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp2'
+                label='实验二'
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp3'
+                label='实验三'
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp4'
+                label='实验四'
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                prop='exp5'
+                label='实验五'
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                prop='avg_score'
+                label='实验成绩'
+              >
+              </el-table-column>
+              <el-table-column
+                prop='kq_score'
+                label='考勤成绩'
+              >
+              </el-table-column>
+              <el-table-column
+                prop='final_score'
+                label='最终成绩'
+              >
+              </el-table-column>
+          <!-- <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </el-tab-pane>
     </el-tabs>
@@ -245,6 +309,7 @@ export default {
       options2: [],
       options: [],
       times: 1,
+      check: false,
       form: {
         expName: '实验一',
         search: '',
@@ -263,8 +328,61 @@ export default {
   },
   mounted() {
     this.getList()
+    this.getStatus()
+    // this.getScore()
   },
   methods: {
+     getScore() {
+      this.$ajax({
+          url: "/teacher/allScore",
+          data: {
+            tno: sessionStorage.getItem('uname')
+          }
+        }).then(res => {
+         if(res.status === 'success'){
+           this.tableData3 = res.data
+           console.log(this.tableData3)
+         }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+    getStatus() {
+       this.$ajax({
+        url: '/teacher/score',
+        data: {
+          str: 'select status from teacher where tno=?',
+          tno: sessionStorage.getItem('uname')
+        }
+      }).then(res=> {
+        if(res.status === 'success') {
+         this.check = res.data[0].status > 0 ? true : false
+         console.log(this.check ,res.data[0].status)
+        }
+         console.log(this.check ,res)
+      })
+    },
+    changeStatus() {
+      let status = 0
+      if(this.check) {
+        status = 1
+      }
+      console.log(status)
+      this.$ajax({
+        url: '/teacher/score',
+        data: {
+          str: 'update teacher set status=' + status +' where tno=?',
+          tno: sessionStorage.getItem('uname')
+        }
+      }).then(res=> {
+        if(res.status === 'success') {
+          if(this.check)
+            this.$message.success('允许学生端查看')
+          else
+            this.$message.success('不允许学生端查看')
+        }
+      })
+    },
     exportExcel () {
       /* generate workbook object from table */
       let wb = XLSX.utils.table_to_book(document.querySelector('.filterTable2'),{ raw: true } );
@@ -338,7 +456,8 @@ export default {
         .catch(err => {
           console.log(err);
         });
-      }).then(()=>{
+      })
+      .then(()=>{
         this.$ajax({
           url: "/teacher/total_score",
           data: {
@@ -347,12 +466,14 @@ export default {
         })
         .then(res => {
           if(res.status === 'success'){
-            this.tableData3 = res.data;
+            console.log(res.data)
           }
         })
         .catch(err => {
           console.log(err);
         });
+      }).then(()=>{
+        this.getScore()
       })
       .catch(err => {
         console.log(err);
