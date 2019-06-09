@@ -141,4 +141,7 @@ export default {
   width:200px;
   background-color: #eee;
 }
+p {
+  font-size: 16px;
+}
 </style>
