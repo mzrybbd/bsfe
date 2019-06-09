@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs type="border-card">
+    <el-tabs type="border-card" style="min-height:516px">
       <el-tab-pane label="实验设置">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
@@ -303,7 +303,8 @@ export default {
           url: '/teacher/add_exp',
           data: {
             tno: sessionStorage.getItem('uname'),
-            name: this.expName[i]
+            name: this.expName[i],
+            index: i
           }
         }).then(res => {
           if(res.status === 'success'){

@@ -25,9 +25,9 @@
         </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible=false">取 消</el-button>
-          <el-button @click="resetForm('ruleForm')" v-show="!update">重置</el-button>
-          <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+          <el-button @click="dialogFormVisible=false" size="small">取 消</el-button>
+          <el-button @click="resetForm('ruleForm')" v-show="!update" size="small">重置</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -80,7 +80,7 @@ export default {
         phone: '13474229060',
         address: '学院楼5楼'
       },
-      formLabelWidth: '120px',
+      formLabelWidth: '80px',
       rules: {
         tno: [
           { required: true, message:'请输入工号', trigger: 'blur' },

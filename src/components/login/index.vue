@@ -46,7 +46,19 @@
         }
       }
     },
+    // beforeRouteEnter(to, from, next){
+    //   window.document.body.style.backgroundColor='linear-gradient(to bottom, #000000 0%, #5788fe 100%)'
+    //   next()
+    // },
+    // beforeRouteLeave(to, from,next) {
+    //   window.document.body.style.backgroundColor=''
+    //   next()
+    // },
+    // beforeDestroy() {
+    //   document.querySelector('body').removeAttribute('style')
+    // },
     mounted(){
+      // document.querySelector('body').setAttribute('style', 'background-color:linear-gradient(to bottom, #000000 0%, #5788fe 100%)')
       window.onresize = function() {
         WIDTH = document.documentElement.clientWidth,
         HEIGHT = document.documentElement.clientHeight;
@@ -256,7 +268,6 @@
                   this.loading = false
                 }else {
                   if(res.data.upwd == this.ruleForm.pass) {
-                    this.$message.success("登录成功")
                     if(sessionStorage) {
                       sessionStorage.setItem('role', res.data.role)
                       sessionStorage.setItem('uname', res.data.uname)
@@ -265,12 +276,15 @@
                     switch(res.data.role) {
                       case '管理员':
                         this.$router.push('/syster/user')
+                        this.$message.success("登录成功")
                         break
                       case '教师':
-                        this.$router.push('/teacher')
+                        this.$router.push('/teacher/class_manager')
+                        this.$message.success("登录成功")
                         break
                       default:
                         this.$router.push('/index')
+                        this.$message.success("登录成功")
                     }
                   }else {
                     this.loading = false
@@ -296,6 +310,7 @@
       overflow: hidden;
       position: relative;
       border-radius: 10px;
+      background: linear-gradient(to bottom, #000000 0%, #5788fe 100%) 
     }
     .login-box {
       width: 360px;
@@ -309,15 +324,15 @@
       left: 50%;
       transform: translate(-50%,-50%);
     }
-    html, body {
-      margin: 0;
-      overflow: hidden;
-      width: 100%;
-      height: 100%;
-      /* cursor: none; */
-      background: black;
-      background: linear-gradient(to bottom, #000000 0%, #5788fe 100%);
-    }
+    // html, body {
+    //   margin: 0;
+    //   overflow: hidden;
+    //   width: 100%;
+    //   height: 100%;
+    //   /* cursor: none; */
+    //   // background:  black !important;
+    //   background:  linear-gradient(to bottom, #000000 0%, #5788fe 100%) !important;
+    // }
 
     .filter {
       width: 100%;
@@ -326,6 +341,7 @@
       top: 0;
       left: 0;
       background: #fe5757;
+      // background: #fe5757;
       animation: colorChange 30s ease-in-out infinite;
       animation-fill-mode: both;
       mix-blend-mode: overlay;

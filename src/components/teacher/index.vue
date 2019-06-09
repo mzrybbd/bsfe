@@ -15,7 +15,7 @@
 		  <el-container class="container">
 		    <el-aside width="220px">
 		    	<el-menu
-		      default-active="0"
+		      default-active="1-1"
 		      class="el-menu-vertical-demo"
 		      @open="handleOpen"
 		      @close="handleClose"
@@ -44,9 +44,9 @@
 		      </el-menu-item>
 		      <el-submenu index="3">
 		        <template slot="title">实验管理</template>
-            <el-menu-item index="3-1">实验管理</el-menu-item>
+            <el-menu-item index="3-1">实验上传</el-menu-item>
             <el-menu-item index="3-2">实验成绩</el-menu-item>
-            <el-menu-item index="3-3">学生记录</el-menu-item>
+            <el-menu-item index="3-3">实验记录</el-menu-item>
 		      </el-submenu>
 		      <el-menu-item index="4">
 		        <template slot="title">消息管理</template>
@@ -59,7 +59,7 @@
 		    <el-main class="main">
 	        <el-col :span="24">
 	          <div>
-	            <transition name="el-fade-in"><router-view></router-view></transition>    <!-- 最重要的标签，用来显示跳转的页面 -->
+	            <router-view></router-view>   <!-- 最重要的标签，用来显示跳转的页面 -->
 	          </div>
 	        </el-col>
 		    </el-main>
@@ -197,6 +197,7 @@
   .main {
     background-color: #eee;
     padding: 10px;
+    height: 550px;
     border: 5px solid #fff;
   }
   .large {

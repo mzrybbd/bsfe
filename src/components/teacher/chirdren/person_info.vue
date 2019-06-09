@@ -2,28 +2,33 @@
   <div class="person">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>个人资料</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="submit('ruleForm')">保存修改</el-button>
+        <span style="line-height:22px;height:22px;">个人资料</span>
+        <div style="float: right; height:22px; line-height:22px;margin-top:-9px" >
+        <el-checkbox v-model="check" @change="changeStatus" id="checkbox">是否允许学生查看详情</el-checkbox>
+        <el-button type="text" @click="submit('ruleForm')">
+          保存修改
+        </el-button>
+        </div>
       </div>
       <div  class="text item">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" size="small">
           <el-form-item prop="tno" :label-width="formLabelWidth" label="工号">
-            <el-input v-model="ruleForm.tno" placeholder="工号"></el-input>
+            <el-input v-model="ruleForm.tno" placeholder="工号" @keyup.enter.native="submit('ruleForm')"></el-input>
           </el-form-item>
           <el-form-item prop="tname" :label-width="formLabelWidth" label="姓名">
-            <el-input v-model="ruleForm.tname" placeholder="姓名"></el-input>
+            <el-input v-model="ruleForm.tname" placeholder="姓名" @keyup.enter.native="submit('ruleForm')"></el-input>
           </el-form-item>
-          <el-form-item label="性别" prop="sex" :label-width="formLabelWidth">
-            <el-radio-group v-model="ruleForm.sex">
+          <el-form-item label="性别" prop="sex" :label-width="formLabelWidth" >
+            <el-radio-group v-model="ruleForm.sex" @keyup.enter.native="submit('ruleForm')">
               <el-radio label="女"></el-radio>
               <el-radio label="男"></el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item prop="email" :label-width="formLabelWidth" label="邮箱">
-            <el-input v-model="ruleForm.email" placeholder="邮箱"></el-input>
+            <el-input v-model="ruleForm.email" placeholder="邮箱" @keyup.enter.native="submit('ruleForm')"></el-input>
           </el-form-item>
           <el-form-item prop="phone" :label-width="formLabelWidth" label="电话">
-            <el-input v-model="ruleForm.phone" placeholder="电话"></el-input>
+            <el-input v-model="ruleForm.phone" placeholder="电话" @keyup.enter.native="submit('ruleForm')"></el-input>
           </el-form-item>
           <el-form-item prop="address" :label-width="formLabelWidth" label="地址">
             <el-input v-model="ruleForm.address" placeholder="地址" @keyup.enter.native="submit('ruleForm')"></el-input>
@@ -113,11 +118,13 @@ export default {
       ruleForm: {},
       formLabelWidth: '80px',
       oldPass: '',
+      tname: '',
       teacher: {
         oldPass: '',
         newPass: '',
         checkPass: ''
       },
+      check: false,
       rules: {
         tno: [
           { required: true, message:'请输入工号', trigger: 'blur' },
@@ -154,8 +161,43 @@ export default {
   },
   mounted() {
     this.getTeacher()
+    this.getStatus()
   },
   methods: {
+     changeStatus() {
+      let status = 0
+      if(this.check) {
+        status = 1
+      }
+      console.log(status)
+      this.$ajax({
+        url: '/teacher/score',
+        data: {
+          str: 'update teacher set status3=' + status +' where tno=?',
+          tno: sessionStorage.getItem('uname')
+        }
+      }).then(res=> {
+        if(res.status === 'success') {
+          if(this.check)
+            this.$message.success('允许学生查看详细信息')
+          else
+            this.$message.success('不允许学生查看详细信息')
+        }
+      })
+    },
+    getStatus() {
+       this.$ajax({
+        url: '/teacher/score',
+        data: {
+          str: 'select status3 from teacher where tno=?',
+          tno: sessionStorage.getItem('uname')
+        }
+      }).then(res=> {
+        if(res.status === 'success') {
+         this.check = res.data[0].status3 > 0 ? true : false
+        }
+      })
+    },
     updatePass(name) {
       this.$refs[name].validate(valid => {
         if(valid && this.oldPass === this.teacher.oldPass && this.oldPass !== this.teacher.newPass) {
@@ -169,11 +211,11 @@ export default {
             if(res.status === 'error'){
               this.$message.error(res.msg)
             }else{
-              this.$message.success('更新成功')
+              this.$message.success('修改成功')
               this.teacher = {}
             }
           }).catch(err => {
-            this.$message.error('更新失败')
+            this.$message.error('修改失败')
           })
         }
         if(this.oldPass !== this.teacher.oldPass) {
@@ -202,11 +244,13 @@ export default {
             this.$message.error(res.msg)
           }else{
             sessionStorage.setItem('uname', this.ruleForm.tno)
-            this.$router.go(0)
-            this.$message.success('更新成功')
+            this.$message.success('修改成功')
+            if(this.ruleForm.tname !== this.tname){
+              this.$router.go(0)
+            }
           }
         }).catch(err => {
-          this.$message.error('更新失败')
+          this.$message.error('修改失败')
         })
        })
     },
@@ -219,6 +263,8 @@ export default {
           }
         }).then(res => {
           this.ruleForm = res.data[0]
+          this.tname = this.ruleForm.tname
+          console.log(this.tname)
         }).catch(err => {
           console.log(err)
         })
@@ -244,7 +290,8 @@ export default {
 <style lang="less" scoped>
   .person {
     display: flex;
-    justify-content: space-around
+    justify-content: space-around;
+    margin-top:45px;
   }
   .text {
     font-size: 14px;

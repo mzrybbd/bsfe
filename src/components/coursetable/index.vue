@@ -1,14 +1,19 @@
 <template>
-  <div>
+  <div style="margin-top: -10px;">
+    <h3 style="text-align:center; padding-top: 18px;height: 25px; margin-top: 10px; font-size: 15px; font-weight: bold;color: #CC0000;letter-spacing: 2px;">
+      - 学生实验课表： {{ sno }} 班级： {{ cname }}-
+    </h3>
+
     <el-table
 	    ref="filterTable"
+      height="380px"
 	    :data="tableData">
-      <el-table-column
+      <!-- <el-table-column
 	      prop="cname"
 	      label="班级"
 	      width="180"
         sortable>
-	    </el-table-column>
+	    </el-table-column> -->
 	    <el-table-column
 	      prop="cdate"
 	      label="日期"
@@ -44,6 +49,7 @@ export default {
     return {
       tableData: [],
       cname: '',
+      sno: sessionStorage.getItem('uname')
     }
   },
   mounted(){

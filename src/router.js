@@ -18,6 +18,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "index" */ './components/home/chirdren/index.vue')
         },
         {
+          path: 'detail',
+          name: 'detail',
+          component: () => import(/* webpackChunkName: "detail" */ './components/home/chirdren/detail.vue')
+        },
+        {
           path: 'experiment',
           name: 'experiment',
           component: () => import(/* webpackChunkName: "experiment" */ './components/experiment/index.vue')
@@ -114,6 +119,11 @@ export default new Router({
         path: 'class',
         name: 'class',
         component: () => import(/* webpackChunkName: "class" */ './components/syster/children/class_manager.vue')
+      },
+      {
+        path: 'home',
+        name: 'homes',
+        component: () => import(/* webpackChunkName: "home" */ './components/syster/children/home_manager.vue')
       },
       {
         path: 'teacher',

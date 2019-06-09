@@ -1,14 +1,14 @@
 <template>
   <div style="height: 100%">
+    <el-card class="box-card" style="min-height: 400px;">
     <el-tabs :tab-position="tabPosition" >
       <el-tab-pane label="个人资料">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
+          <!-- <div style="margin-bottom: 20px">
             <span>个人资料</span>
             <el-button style="float: right; padding: 3px 0" type="text" @click="submit('ruleForm')">保存修改</el-button>
-          </div>
+          </div> -->
           <div  class="text item">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" size="small">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" size="small" label-width="80px">
               <el-form-item prop="sno" :label-width="formLabelWidth" label="学号">
                 <el-input v-model="ruleForm.sno" placeholder="学号"></el-input>
               </el-form-item>
@@ -31,18 +31,20 @@
                   <el-radio label="男"></el-radio>
                 </el-radio-group>
               </el-form-item>
+              <el-form-item label="">
+                 <el-button type="primary" @click="submit('ruleForm')">保存修改</el-button>
+              </el-form-item>
             </el-form>
           </div>
-      </el-card>
       </el-tab-pane>
       <el-tab-pane label="修改密码">
-        <el-card class="box-card">
+        <!-- <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>修改密码</span>
             <el-button style="float: right; padding: 3px 0" type="text" @click="updatePass('student')">保存修改</el-button>
-          </div>
+          </div> -->
           <div  class="text item">
-            <el-form :model="student" status-icon :rules="rules2" ref="student" label-width="100px" class="demo-ruleForm">
+            <el-form :model="student" status-icon :rules="rules2" ref="student" label-width="100px" class="demo-ruleForm" size="small">
               <el-form-item label="密码" prop="oldPass">
                 <el-input type="password" v-model="student.oldPass" autocomplete="off"></el-input>
               </el-form-item>
@@ -52,16 +54,20 @@
               <el-form-item label="确认新密码" prop="checkPass">
                 <el-input type="password" v-model="student.checkPass" autocomplete="off" @keyup.enter.native="updatePass('student')"></el-input>
               </el-form-item>
+              <el-form-item label="">
+                <el-button type="primary" @click="updatePass('student')">保存修改</el-button>
+              </el-form-item>
             </el-form>
           </div>
-        </el-card>
+        <!-- </el-card> -->
       </el-tab-pane>
-      <el-tab-pane label="考勤管理">
+      <el-tab-pane label="考勤记录">
+        <h3 style="text-align:center; height: 25px; margin: 10px; font-size: 15px; font-weight: bold;color: #CC0000;letter-spacing: 2px;">
+        {{sname}} - {{sno}}</h3>
         <el-table
-          height="500"
           ref="filterTable"
           :data="tableData.filter(data => !search || data.sno.toLowerCase().includes(search.toLowerCase()) || data.stime.toLowerCase().includes(search.toLowerCase()) || data.sname.toLowerCase().includes(search.toLowerCase()))">
-          <el-table-column
+          <!-- <el-table-column
             prop="sno"
             label="学号"
             sortable>
@@ -71,7 +77,7 @@
             label="姓名"
             sortable
           >
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="date"
             label="日期"
@@ -84,12 +90,10 @@
           </el-table-column>
           <el-table-column
             prop="stime"
-            sortable
             label="开始时间">
           </el-table-column>
           <el-table-column
             prop="etime"
-            sortable
             label="结束时间">
           </el-table-column>
           <el-table-column
@@ -120,13 +124,41 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="成绩管理">
+      <el-tab-pane label="实验记录">
+         <el-table
+          :data="tableData4">
+          </el-table-column>
+           <el-table-column
+            prop='name'
+            label='实验'
+          >
+          </el-table-column>
+          <el-table-column
+            prop='filename'
+            label='文件名'
+            width="280px"
+          >
+          </el-table-column>
+          <el-table-column
+            prop='size'
+            label='大小'
+          >
+          </el-table-column>
+          <el-table-column
+            prop='submit_time'
+            label='提交时间'
+          >
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="成绩记录">
         <div>
-          <div v-if="show">教师端未开启
+          <div v-if="show">
+            <h3 style="text-align:center; height: 25px; margin: 10px; font-size: 15px; font-weight: bold;color: #CC0000;letter-spacing: 2px;">
+           {{sname}} - {{sno}}</h3>
             <el-table
-              height="500"
               :data="tableData3">
-              <el-table-column
+              <!-- <el-table-column
                 prop="sno"
                 label="学号"
                 sortable>
@@ -138,36 +170,31 @@
               <el-table-column
                 prop="cname"
                 label="班级"
-              >
+              > -->
               </el-table-column>
               <el-table-column
                 prop='exp1'
                 label='实验一'
-                sortable            
               >
               </el-table-column>
               <el-table-column
                 prop='exp2'
                 label='实验二'
-                sortable
               >
               </el-table-column>
               <el-table-column
                 prop='exp3'
                 label='实验三'
-                sortable
               >
               </el-table-column>
               <el-table-column
                 prop='exp4'
                 label='实验四'
-                sortable
               >
               </el-table-column>
               <el-table-column
                 prop='exp5'
                 label='实验五'
-                sortable
               >
               </el-table-column>
               <el-table-column
@@ -191,6 +218,7 @@
         </div>
       </el-tab-pane>
   </el-tabs>
+  </el-card>
   </div>
 </template>
 
@@ -218,11 +246,14 @@ export default {
     };
     return {
       tableData3: [],
+      tableData4: [],
+      sno: sessionStorage.getItem('uname'),
       show: false,
       tabPosition: 'left',
       stypeArray: ['正常','迟到'],
       etypeArray: ['正常','早退'],
       tableData: [],
+      sname: '',
       student: {
         oldPass: '',
         newPass: '',
@@ -236,7 +267,7 @@ export default {
         avatar: '',
       },
       options: [],
-      formLabelWidth: '120px',
+      formLabelWidth: '80px',
       rules: {
         sno: [
           { required: true, message:'请输入学号', trigger: 'blur' },
@@ -274,8 +305,24 @@ export default {
     this.getList()
     this.getKq_table()
     this.getScore()
+    this.getRecord()
   },
 	methods: {
+    getRecord() {
+      this.$ajax({
+          url: "/stu/expRecord",
+          data: {
+            sno: sessionStorage.getItem('uname')
+          }
+        }).then(res => {
+         if(res.status === 'success'){
+           this.tableData4 = res.data
+           console.log(this.tableData4)
+         }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
     getScore() {
       this.$ajax({
           url: "/teacher/scoreOne",
@@ -424,6 +471,7 @@ export default {
       }).then(res => {
         if(res.status === 'success') {
           this.tableData = res.data
+          this.sname=res.data[0].sname
         }
       }).catch(err => {
         console.log(err);
@@ -433,9 +481,13 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+  .el-select .el-input.is-focus .el-input__inner{
+    width:450px;
+  }
   .text {
     font-size: 14px;
+    margin-top: 30px
   }
   h2 {
     margin: .67em 0;
@@ -453,5 +505,10 @@ export default {
   .clearfix:after {
     clear: both
   }
-
+  .el-tabs--left .el-tabs__nav.is-left{
+    height: 400px !important;
+  }
+  .el-tabs__item{
+    font-size: 16px !important;
+  }
 </style>

@@ -14,7 +14,7 @@
     <create_ct ref="create_ct" @create="update"></create_ct>
     <update_ct ref="update_ct" @update="update"></update_ct>
 	  <el-table
-      height="500"
+      height="456"
 	    ref="filterTable"
 	    :data="tableData.filter(data => !search || data.cdate.toLowerCase().includes(search.toLowerCase()) || data.stime.toLowerCase().includes(search.toLowerCase()) || data.cname.toLowerCase().includes(search.toLowerCase()))">
       <el-table-column
@@ -125,14 +125,14 @@ export default {
             this.$message.error(res.msg)
           }else{
             rows.splice(index, 1)
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
           }
         }).catch(err => {
           console.log(err)
         })
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
       }).catch(() => {
         this.$message({
           type: 'info',

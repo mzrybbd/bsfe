@@ -1,14 +1,14 @@
 <template>
 	<div>
 	  <el-dialog title="学生管理" :visible.sync="dialogFormVisible">
-			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" size="small">
-        <el-form-item prop="sno" :label-width="formLabelWidth" label="学号">
+			<el-form :model="ruleForm" :rules="rules" ref="ruleForm"  size="small" label-width="80px" >
+        <el-form-item prop="sno" label="学号">
           <el-input v-model="ruleForm.sno" placeholder="学号"></el-input>
         </el-form-item>
-         <el-form-item prop="sname" :label-width="formLabelWidth" label="姓名">
+         <el-form-item prop="sname" label="姓名">
           <el-input v-model="ruleForm.sname" placeholder="姓名"></el-input>
         </el-form-item>
-        <el-form-item prop="cname" :label-width="formLabelWidth" label="班级">
+        <el-form-item prop="cname" label="班级">
          	<el-select v-model="ruleForm.cname" filterable placeholder="请选择班级">
 				    <el-option
 				      v-for="item in options"
@@ -18,7 +18,7 @@
 				    </el-option>
 				  </el-select> 
         </el-form-item>
-			  <el-form-item label="性别" prop="sex" :label-width="formLabelWidth">
+			  <el-form-item label="性别" prop="sex">
 			    <el-radio-group v-model="ruleForm.sex">
 			      <el-radio label="女"></el-radio>
 			      <el-radio label="男"></el-radio>
@@ -50,7 +50,6 @@ export default {
         pwd: '123456'
       },
       options: [],
-      formLabelWidth: '120px',
       rules: {
          sno: [
             { required: true, message:'请输入学号', trigger: 'blur' },
@@ -154,5 +153,30 @@ export default {
 }
 </script>
 <style>
-
+  .el-input--small .el-input__inner {
+    width: 300px;
+  }
+  .el-dialog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0 !important;
+    transform: translate(-50%, -50%);
+    max-height: calc(100% - 30px);
+    max-width: calc(100% - 30px);
+    display: flex;
+    flex-direction: column;
+    width: auto;
+  }
+  .el-dialog__body{
+    padding-bottom: 0;
+    padding-top: 5px;
+  }
+  .el-dialog__title {
+    line-height: 18px;
+    font-size: 18px;
+    color: #464c5b;
+    /* color: #303133; */
+    font-weight: 700;
+  }
 </style>

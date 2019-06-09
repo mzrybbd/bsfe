@@ -2,19 +2,19 @@
 	<div>
     <el-form :inline="true" class="demo-form-inline">
        <el-form-item>
-          <el-input v-model="search" size="small" prefix-icon="el-icon-search" placeholder="请输入工号或姓名" clearable></el-input>
+          <el-input v-model="search"  prefix-icon="el-icon-search" placeholder="请输入工号或姓名" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="handleAdd">新增</el-button>
+          <el-button  type="primary" @click="handleAdd">新增</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="clearFilter">清空筛选</el-button>
+          <el-button  type="primary" @click="clearFilter">清空筛选</el-button>
         </el-form-item>
     </el-form>
     <create_user ref="create_user" @create="update"></create_user>
     <create_user ref="update_user" @update="update"></create_user>
 	  <el-table
-      height="500"
+      height="450"
 	    ref="filterTable"
 	    :data="tableData.filter(data => !search || data.tno.toLowerCase().includes(search.toLowerCase()) || data.tname.toLowerCase().includes(search.toLowerCase()))"
 	    >

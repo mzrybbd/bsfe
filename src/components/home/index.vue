@@ -1,13 +1,24 @@
 <template>
   <div class="layout">
     <el-container>
-      <el-header class="header">
-        <el-menu :default-active="this.$router.path" router mode="horizontal" class="menu" 
-          
+      <el-header class="header" style="height:120px;">
+        <el-menu  router mode="horizontal" class="menu2" 
           active-text-color="#007fff">
-           <el-menu-item>
+          <div class="layout-logo">
+            <img src="../../assets/img/logo.png" style="height:38px;float:left;margin-top:9px;"></img>
+            <div class="em-medline"></div>
+            <el-button  type="text" style="float:left;font-size: 22px; color: #2d8cf0;margin-top:6px; margin-left:12px;"> 计算机组成原理实验系统</el-button>
+            <img src="https://clubstyle.club.vmall.com/template/hw_fans/image/zh/css/img/forlove.png" class="em-forlove"></img>
+          </div>
+        <!-- <el-button type="text" icon="large iconfont icon-xueshimao-shi" style="color: #007fff; width:900px;"> 计算机组成原理实验系统</el-button> -->
+        </el-menu>
+        <!-- <el-button type="text" icon="large iconfont icon-xueshimao-shi" style="color: #007fff"> 计算机组成原理实验系统</el-button> -->
+
+        <el-menu default-active="/index"  router mode="horizontal" class="menu" 
+          active-text-color="#007fff">
+           <!-- <el-menu-item>
             <el-button type="text" icon="large iconfont icon-xueshimao-shi" style="color: #007fff"> 计算机组成原理实验系统</el-button>
-          </el-menu-item>
+          </el-menu-item> -->
           <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">
             {{ item.navItem }}
           </el-menu-item>
@@ -20,23 +31,23 @@
                 <el-button type="primary" round size="small" @click="qiandao" :disabled="disabled">签到</el-button>
                 <el-button type="primary" round size="small" @click="qianli" :disabled="disabled2">签离</el-button>
                 
-                 <el-link :underline="false">  &nbsp; &nbsp;{{ this.msg }}</el-link>
+                 <el-link :underline="false" style="text-decoration: none;">  &nbsp; &nbsp;{{ this.msg }}</el-link>
                 <!-- <span> {{ this.msg }}</span> -->
               </div>
               <p class="kqtable" @click="handleCommand()">查看考勤表</p>
               <i class="iconfont icon-ico_info_pointstishi"></i>
               <span>上课前5分钟内和下课后5分钟内为正常签到时间，上课1小时后无法签到将视为旷课，无法提前签到或是延后签离</span>
-              <el-button slot="reference">签到</el-button>
+              <el-button slot="reference" type="text" style="font-size:18px; color:#909399">签到</el-button>
             </el-popover>
           </el-menu-item>
           <el-menu-item>
-            <el-button type="ghost" size="small" icon="iconfont icon-logout1" @click="logout">退出</el-button>
+            <el-button type="text"  style="font-size:18px; color:#909399" icon="iconfont icon-logout1" @click="logout">退出</el-button>
           </el-menu-item>
         </el-menu>
       </el-header>
       <el-main class="main">
         <div class="container">
-          <transition name="el-fade-in" ><router-view></router-view></transition>
+          <router-view></router-view>
         </div>
       </el-main>
       <el-footer class="footer">版权所有 &copy; 西北农林科技大学 2019 计算机组成原理实验系统</el-footer>
@@ -48,11 +59,12 @@
 export default {
   data() {
     return {
+      // img: require("../../assets/img/logo.jpg") ,
       navList:[
         {name:'/index',navItem:'首页'},
         {name:'/coursetable',navItem:'课表'},
         {name:'/experiment',navItem:'实验'},
-        {name:'/message',navItem:'消息'},
+        {name:'/message',navItem:'留言'},
         {name:'/personalCenter',navItem:'个人中心'}
       ],
       date: '',
@@ -199,7 +211,7 @@ export default {
             this.disabled2 = true
             this.disabled = true;
             this.msg = '今天没有课程，不需要签到'
-            this.$message.info('今天没有课程，不需要签到')
+            // this.$message.info('今天没有课程，不需要签到')
           }
           else {
             this.$message.error(res.msg)
@@ -316,7 +328,7 @@ export default {
               cdate: this.date
             }
           }).then(res => {
-              console.log('qiandao',res.data)
+            console.log('qiandao',res.data)
             if(res.status === 'success' && res.data){
               this.record = res.data
               this.stime = res.data.cdate + ' ' + res.data.stime
@@ -436,12 +448,12 @@ export default {
 <style scoped lang="less">
 .menu {
   display: flex;
-  width: 70%;
+  width: 75%;
   margin: 0 auto;
   justify-content: space-around;
 }
-.header {
-  background-color: #545c64;
+.el-menu.el-menu--horizontal:nth-child(2){
+  border-bottom: none;
 }
 .main {
   width: 100%;
@@ -455,12 +467,54 @@ export default {
   background: #fff;
 }
 .footer {
-  margin: auto;
+  margin: 0 auto;
+  height: 50px;
+  line-height:50px;
+  // background-color: rgb(247,247,247);
+}
+.header{
+  height: 120px;
 }
 .kqtable {
   font-size:14px;
   line-height:14px;
   color: blue;
   cursor: pointer;
+}
+.el-main{
+  background-color: rgb(247,247,247);
+}
+.menu2{
+    display: -webkit-box;
+    margin: 0 auto;
+    height: 60px;
+    width: 75%;
+}
+.layout-logo{
+  height: 60px;
+  line-height:60px;
+}
+.em-forlove {
+    display: block;
+    width: 94px;
+    height: 29px;
+    margin-top: 12px;
+    float: left;
+    line-height: 44px;
+    margin-left: 19px;
+}
+.em-medline {
+    background-image: url(https://clubstyle.club.vmall.com/template/hw_fans/image/zh/css/img/medline.gif);
+    height: 31px;
+    width: 1px;
+    float: left;
+    margin-top: 14px;
+    margin-left: 13px;
+}
+.el-menu-item {
+  font-size: 16px;
+}
+.el-button{
+  margin-top: 0px;
 }
 </style>

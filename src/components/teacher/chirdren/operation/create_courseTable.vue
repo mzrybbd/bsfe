@@ -1,12 +1,13 @@
 <template>
   <div class="block">
     <el-dialog title="课表管理" :visible.sync="dialogFormVisible">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px" size="small">
         <el-form-item label="实验日期" prop="dates">
           <el-date-picker
             type="dates"
             v-model="form.dates"
             placeholder="选择一个或多个日期"
+            :picker-options="pickerOptions0"
             value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
@@ -100,7 +101,14 @@ export default {
         {label: '16:00 ~ 17:50（夏季7、8节）', value: '4-1'}, 
         {label: '16:30 ~ 18:20（冬季7、8节）', value: '4-2'}, 
         {label: '19:30 ~ 21:20（9、10节）', value: '5'}, 
-        {label: '其他', value: '0'}]
+        {label: '其他', value: '0'}
+      ],
+      pickerOptions0: {
+        disabledDate(time) {
+          // console.log(time)
+           return  time.getTime() < Date.now() - 8.64e7;//如果没有后面的-8.64e7就是不可以选择今天的 
+        }
+      },
     }
   },
   mounted() {
@@ -217,5 +225,22 @@ export default {
 </script>
 
 <style>
-
+  .el-input--small .el-input__inner,.el-range-editor--small.el-input__inner {
+    width: 300px;
+  }
+  .el-dialog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0 !important;
+    transform: translate(-50%, -50%);
+    max-height: calc(100% - 30px);
+    max-width: calc(100% - 30px);
+    display: flex;
+    flex-direction: column;
+    width: auto;
+  }
+  .el-dialog__body{
+    padding-bottom: 0;
+  }
 </style>

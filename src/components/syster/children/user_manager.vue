@@ -2,15 +2,15 @@
 	<div class="layout">
     <el-form :inline="true" class="demo-form-inline layout-content">
        <el-form-item>
-          <el-input v-model="search" size="small" prefix-icon="el-icon-search" placeholder="请输入用户名" clearable></el-input>
+          <el-input v-model="search" prefix-icon="el-icon-search" placeholder="请输入用户名" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="clearFilter">清空筛选</el-button>
+          <el-button  type="primary" @click="clearFilter">清空筛选</el-button>
         </el-form-item>
     </el-form>
     <nickname ref="nickname" @update="update"></nickname>
 	  <el-table
-      height="500"
+      height="450"
 	    ref="filterTable"
 	    :data="tableData.filter(data => !search || data.uname.toLowerCase().includes(search.toLowerCase()))"
 	    >
@@ -123,5 +123,8 @@
 <style lang="less" scoped>
  .el-table {
    margin: 0 auto;
+ }
+ .el-input{
+   width:auto;
  }
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div>
     <el-tabs v-model="activeName" type="border-card" @tab-click="init">
-      <el-tab-pane label="实时考勤" name="first">
+      <el-tab-pane label="实时考勤" name="first" style="min-height: 430px;">
         <el-form :inline="true" class="demo-form-inline">
           <el-form-item>
             <el-input v-model="search"  prefix-icon="el-icon-search" placeholder="请输入学号或姓名或班级或日期" clearable></el-input>
@@ -11,7 +11,7 @@
               <el-option
                 v-for="item in times"
                 :key="item.value"
-                :label="item.label"
+                :label="item.label"""
                 :value="item.value">
               </el-option>
             </el-select>
@@ -35,6 +35,9 @@
           <el-form-item>
             <el-button  type="primary" @click="tongji">考勤统计</el-button>
           </el-form-item>
+           <el-form-item>
+            <el-button  type="primary" @click="handleAdd">请假录入</el-button>
+          </el-form-item>
          <div>
           <div v-if="flagInfo">
             <p>应到人数： {{sj_kq.total_num}}，实到人数：{{sj_kq.true_num}}，缺勤人数：{{sj_kq.absence_num}}，迟到人数：{{sj_kq.late_num}}，早退人数：{{sj_kq.early_num}}，迟到早退人数：{{sj_kq.late_early_num}}，正常人数：{{sj_kq.normal_num}}</p>
@@ -47,55 +50,47 @@
         </el-form>
          <el-table
          v-show="flagInfo"
-          height="500"
+          height="312"
           ref="filterTable"
           :data="tableData1.filter(data => !search || data.date.toLowerCase().includes(search.toLowerCase()) || data.sno.toLowerCase().includes(search.toLowerCase()) || data.sname.toLowerCase().includes(search.toLowerCase()) || data.cname.toLowerCase().includes(search.toLowerCase()))">
           <el-table-column
             prop="sno"
             label="学号"
-            width="100px"
             sortable>
           </el-table-column>
           <el-table-column
             prop="sname"
             label="姓名"
             sortable
-            width="100px"
           ></el-table-column>
           <el-table-column
             prop="cname"
             label="班级"
             sortable
-            width="100px"
           >
           </el-table-column>
           <el-table-column
             prop="date"
-            width="100px"
             label="日期"
           >
           </el-table-column>
           <el-table-column
             prop="kweek"
             label="星期"
-            width="100px"
           >
           </el-table-column>
           <el-table-column
             prop="stime"
             sortable
-            width="100px"
             label="开始时间">
           </el-table-column>
           <el-table-column
             prop="etime"
             sortable
-            width="100px"
             label="结束时间">
           </el-table-column>
           <el-table-column
             prop="stype"
-            width="100px"
             label="签到状态"
             :filters="[{ text: '迟到', value: '迟到' }, { text: '正常', value: '正常'}]"
             :filter-method="filterStype"
@@ -109,7 +104,6 @@
           <el-table-column
             prop="etype"
             label="签离状态"
-            width="100px"
             :filters="[{ text: '早退', value: '早退' }, { text: '正常', value: '正常'}]"
             :filter-method="filterEtype"
             filter-placement="bottom-end">
@@ -166,56 +160,48 @@
           </el-form-item>
         </el-form>
         <el-table
-          height="500"
+          height="386"
           ref="filterTable"
           :data="tableData.filter(data => !form.search || data.date.toLowerCase().includes(form.search.toLowerCase()) || data.sno.toLowerCase().includes(form.search.toLowerCase()) || data.sname.toLowerCase().includes(form.search.toLowerCase()) || data.cname.toLowerCase().includes(form.search.toLowerCase()))">
           <!-- (!search &&　!cname && !date) || data.sno.toLowerCase().includes(search.toLowerCase()) || data.sname.toLowerCase().includes(search.toLowerCase()) || data.cname.toLowerCase().includes(cname.toLowerCase()) || data.date.toLowerCase().includes(date) -->
           <el-table-column
             prop="sno"
             label="学号"
-            width="100px"
             sortable>
           </el-table-column>
           <el-table-column
             prop="sname"
             label="姓名"
             sortable
-            width="100px"
           ></el-table-column>
           <el-table-column
             prop="cname"
             label="班级"
             sortable
-            width="100px"
           >
           </el-table-column>
           <el-table-column
             prop="date"
-            width="100px"
             label="日期"
           >
           </el-table-column>
           <el-table-column
             prop="kweek"
             label="星期"
-            width="100px"
           >
           </el-table-column>
           <el-table-column
             prop="stime"
             sortable
-            width="100px"
             label="开始时间">
           </el-table-column>
           <el-table-column
             prop="etime"
             sortable
-            width="100px"
             label="结束时间">
           </el-table-column>
           <el-table-column
             prop="stype"
-            width="100px"
             label="签到状态"
             :filters="[{ text: '迟到', value: '迟到' }, { text: '正常', value: '正常'}]"
             :filter-method="filterStype"
@@ -229,7 +215,6 @@
           <el-table-column
             prop="etype"
             label="签离状态"
-            width="100px"
             :filters="[{ text: '早退', value: '早退' }, { text: '正常', value: '正常'}]"
             :filter-method="filterEtype"
             filter-placement="bottom-end">
@@ -263,9 +248,12 @@
           <el-form-item>
             <el-button  type="primary" @click="reset('form')">清空查询</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button  type="primary" @click="total_kq">矫正信息</el-button>
+          </el-form-item>
         </el-form>
         <el-table
-          height="500"
+          height="386"
           ref="filterTable"
           :data="tableData2.filter(data => !search1 ||  data.sno.toLowerCase().includes(search1.toLowerCase()) || data.sname.toLowerCase().includes(search1.toLowerCase()) || data.cname.toLowerCase().includes(search1.toLowerCase()))">
           <!-- (!search &&　!cname && !date) || data.sno.toLowerCase().includes(search.toLowerCase()) || data.sname.toLowerCase().includes(search.toLowerCase()) || data.cname.toLowerCase().includes(cname.toLowerCase()) || data.date.toLowerCase().includes(date) -->
@@ -360,14 +348,15 @@
         </el-card>
       </el-tab-pane> -->
     </el-tabs>
-    
+    <add_qingjia ref="add_qingjia"></add_qingjia>
 	</div>
 </template>
 
 <script>
-  import create_user from './operation/create_student'
+  // import create_user from './operation/create_student'
+  import add_qingjia from './operation/add_qingjia'
   export default {
-    components:　{ create_user },
+    components:　{ add_qingjia },
     data() {
       return {
         ruleForm: {},
@@ -424,14 +413,14 @@
     },
     mounted(){
       this.getData()
-      this.total_kq()
+      this.total_kq2()
       this.getList()
       this.tongji()
     },
     methods: {
       init(){
         this.getData()
-        this.total_kq()
+        this.total_kq2()
         this.getList()
         this.tongji()
       },
@@ -576,7 +565,25 @@
             console.log(sessionStorage.getItem('uname'))
             if(res.status === 'success') {
               this.tableData2 = res.data
-              console.log(this.tableData2)
+              console.log('hhh',this.tableData2)
+            }
+          }).catch(err => {
+            console.log(err);
+          });
+        })
+      },
+      total_kq2() {
+        this.$nextTick(function() {
+          this.$ajax({
+            url: '/teacher/total_kq',
+            data: {
+              tno: sessionStorage.getItem('uname')
+            }
+          }).then(res => {
+            console.log(sessionStorage.getItem('uname'))
+            if(res.status === 'success') {
+              this.tableData2 = res.data
+              console.log('hhh',this.tableData2)
             }
           }).catch(err => {
             console.log(err);
@@ -611,7 +618,8 @@
         })
       },
       handleAdd() {
-        this.$refs.create_user.showFrame()
+        this.$refs.add_qingjia.showFrame()
+        this.init()
       },
       clearFilter() {
         this.$refs.filterTable.clearFilter();

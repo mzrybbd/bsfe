@@ -53,13 +53,12 @@ export default {
       time: [new Date(2016, 9, 10, 14), new Date(2016, 9, 10, 15, 50)],
       dialogFormVisible: false,
       rules: {
-        cdate: [
+        last_date: [
           { required: true, message:'请选择日期', trigger: 'blur' }
         ],
         cname: [
           { required: true, message:'请选择班级', trigger: 'blur' }
         ],
-
         address: [
           { required: true, message:'请输入地址', trigger: 'blur' }
         ]

@@ -38,7 +38,7 @@
           </el-form-item> -->
         </el-form>
         <el-table
-          height="500"
+          height="386"
           ref="filterTable"
           :data="tableData.filter(data => !form.search || data.sno.toLowerCase().includes(form.search.toLowerCase()) || data.sname.toLowerCase().includes(form.search.toLowerCase()) || data.cname.toLowerCase().includes(form.search.toLowerCase()))">
           <el-table-column
@@ -99,7 +99,7 @@
         </el-form>
 
         <el-table
-          height="500"
+          height="386"
           ref="filterTable2"
           class="filterTable2"
           :data="tableData2.filter(data => !form2.search || data.sno.toLowerCase().includes(form2.search.toLowerCase()) || data.sname.toLowerCase().includes(form2.search.toLowerCase()) || data.cname.toLowerCase().includes(form2.search.toLowerCase()))">
@@ -192,7 +192,7 @@
           </el-form-item>  
         </el-form>
         <el-table
-          height="500"
+          height="386"
           ref="filterTable3"
           class="filterTable3"
           :data="tableData3.filter(data => !form3.search || data.sno.toLowerCase().includes(form3.search.toLowerCase()) || data.sname.toLowerCase().includes(form3.search.toLowerCase()) || data.cname.toLowerCase().includes(form3.search.toLowerCase()))">
@@ -229,7 +229,7 @@
           <el-table-column
                 prop="sno"
                 label="学号"
-                width='100px'
+                width="110px"
                 sortable>
               </el-table-column>
               <el-table-column

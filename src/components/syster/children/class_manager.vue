@@ -2,10 +2,10 @@
   	<div>
     <el-form :inline="true" :rules="rules" :model="form" ref='form' class="demo-form-inline">
        <el-form-item>
-          <el-input v-model="search" size="small" :rules="rules" prefix-icon="el-icon-search" placeholder="请输入工号或班级" clearable></el-input>
+          <el-input v-model="search"  :rules="rules" prefix-icon="el-icon-search" placeholder="请输入工号或班级" clearable></el-input>
         </el-form-item>
         <el-form-item prop="tno">
-         	<el-select v-model="form.tno" filterable size="small" placeholder="请选择教师">
+         	<el-select v-model="form.tno" filterable placeholder="请选择教师">
 				    <el-option
 				      v-for="item in options"
 				      :key="item.tno"
@@ -17,14 +17,14 @@
 				  </el-select> 
         </el-form-item>
         <el-form-item prop="cname">
-          <el-input v-model="form.cname" size="small" placeholder="班级" clearable></el-input>
+          <el-input v-model="form.cname" placeholder="班级" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="handleAdd('form')">添加</el-button>
+          <el-button  type="primary" @click="handleAdd('form')">添加</el-button>
         </el-form-item>
     </el-form>
 	  <el-table
-      height="500"
+      height="450"
 	    ref="filterTable"
 	    :data="tableData.filter(data => !search || data.cname.toLowerCase().includes(search.toLowerCase()) || data.tno.toLowerCase().includes(search.toLowerCase()))">
 	    <el-table-column
@@ -101,6 +101,7 @@ export default {
       this.$refs.update.setRuleForm(Object.assign({}, row))
     },
     handleDelete(index, row, rows) {
+      console.log(row.cname)
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -109,7 +110,7 @@ export default {
       this.$ajax({
         url: '/teacher/deleteClass',
         data: {
-          uname: row.cname
+          cname: row.cname
         }
       }).then(res => {
         rows.splice(index, 1)

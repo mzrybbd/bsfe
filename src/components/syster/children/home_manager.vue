@@ -20,10 +20,10 @@
           <el-button type="primary" @click="upload">点击上传</el-button>
           <span slot="tip" class="el-upload__tip" style="font-size: 16px; color: red; margin-left:10px;">注意：一次最多上传10个文件</span>
         </el-upload>
-      </el-form-item>
+       </el-form-item> 
     </el-form>
   <el-table
-      height="456"
+      height="450"
 	    ref="filterTable"
 	    :data="tableData">
       <el-table-column
@@ -62,7 +62,7 @@ export default {
     return {
       tableData: [],
       fileList: [],
-      src: 'http://localhost:3000/teacher/uploadFile?tno=' + sessionStorage.getItem('uname')
+      src: 'http://localhost:3000/teacher/uploadFile?tno=home' 
     }
   },
   mounted(){
@@ -73,13 +73,12 @@ export default {
       this.$ajax({
         url: 'teacher/allFile',
         data: {
-          tno: './uploads/'+sessionStorage.getItem('uname')
+          tno: './uploads/home'
         }
       }).then(res => {
         if(res.status === 'success') {
           this.tableData = res.data
         }
-        console.log(res.data)
       })
     },
     handlePreview() {
@@ -137,13 +136,7 @@ export default {
 
     },
     handleError(err, file, fileList) {
-      // this.tempArr.forEach((element, index) => {
-      //   if (element.uid === file.uid) {
-      //     this.tempArr.splice(index, 1); // 上传失败删除该记录
-      //     this.$message.error('文件上传失败');
-      //     this.$emit('changeFileList', this.tempArr);
-      //   }
-      // });
+
     },
     objAddItem(tempArr, file) {
       const tempObj = {
@@ -156,33 +149,12 @@ export default {
       this.$emit('changeFileList', tempArr);
     },
     handleProgress(event, file, fileList){
-      // this.tempArr.forEach((element, index)=>{
-      //   if(element.uid === file.uid){
-      //     const progress = Math.floor(event.percent)
-      //     element.progress = progress === 100 ? 99 : progress;
-      //   this.$set(this.tempArr, index, element);
-      //   this.$emit('changeFileList', this.tempArr);
-      //   }
-      // })
+
     },
     beforeUpload(file){
-      console.log(file)
-      let fd = new FormData();
-      fd.append('tno', sessionStorage.getItem('uname'))
-      this.$ajax({
-        url:'/teacher/uploadFile',
-        data:fd,
-         onUploadProgress(progressEvent){
-            if (progressEvent.lengthComputable) {
-              let val = (progressEvent.loaded / progressEvent.total * 100).toFixed(0);
-              that.formData.showProgress = true;
-              that.formData.startValue = parseInt(val)
-            }
-          }
-      }).then(res =>{
-        console.log(fd)
-        // this.$message.success('上传成功')
-      })
+      console.log(file.length)
+      
+      
     },
     handleSuccess(res, file, fileList) {
       this.getList()

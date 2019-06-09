@@ -35,12 +35,15 @@
 		      <el-menu-item index="4">
 		        <span slot="title">学生管理</span>
 		      </el-menu-item>
+          <el-menu-item index="5">
+		        <span slot="title">首页管理</span>
+		      </el-menu-item>
 		    </el-menu>
 		    </el-aside>
 		    <el-main class="main">
 	        <el-col :span="24">
 	          <div>
-	            <transition name="el-fade-in"><router-view></router-view></transition>    <!-- 最重要的标签，用来显示跳转的页面 -->
+	            <router-view></router-view>    <!-- 最重要的标签，用来显示跳转的页面 -->
 	          </div>
 	        </el-col>
 		    </el-main>
@@ -73,6 +76,9 @@
             break;
           case '4':
             this.$router.push('/syster/student');
+            break;
+          case '5':
+            this.$router.push('/syster/home');
             break;
         }
       },

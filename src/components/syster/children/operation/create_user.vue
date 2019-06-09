@@ -20,9 +20,9 @@
         </el-form-item>
       </el-form>
 		  <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible=false">取 消</el-button>
-        <el-button @click="resetForm('ruleForm')" v-show='see'>重置</el-button>
-		    <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        <el-button @click="dialogFormVisible=false" size="small">取 消</el-button>
+        <!-- <el-button @click="resetForm('ruleForm')" v-show='see' size="small">重置</el-button> -->
+		    <el-button type="primary" @click="submitForm('ruleForm')" size="small">确 定</el-button>
 		  </div>
 		</el-dialog>
 	</div>
@@ -48,7 +48,7 @@ export default {
           value: '教师',
           label: '教师'
         }],
-      formLabelWidth: '120px',
+      formLabelWidth: '80px',
       rules: {
         uname: [
           { required: true, message:'请输入账号', trigger: 'blur' },
@@ -107,5 +107,30 @@ export default {
 }
 </script>
 <style>
-
+  .el-input--small .el-input__inner {
+    width: 300px;
+  }
+  .el-dialog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0 !important;
+    transform: translate(-50%, -50%);
+    max-height: calc(100% - 30px);
+    max-width: calc(100% - 30px);
+    display: flex;
+    flex-direction: column;
+    width: auto;
+  }
+  .el-dialog__body{
+    padding-bottom: 0;
+    padding-top: 5px;
+  }
+  .el-dialog__title {
+    line-height: 18px;
+    font-size: 18px;
+    color: #464c5b;
+    /* color: #303133; */
+    font-weight: 700;
+  }
 </style>

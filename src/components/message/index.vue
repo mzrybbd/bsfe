@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-tabs type="border-card" @tab-click="as">
+    <el-tabs type="border-card" @tab-click="as" style="min-height:436px;">
       <el-tab-pane v-for="item in options" :label="item.name" :key="item.name">
         <el-form ref="form" :model="form" :rules="rules" >
           <h3>评论区</h3>
-          <el-form-item  prop="content">
+          <el-form-item  prop="content"
             <el-input
               type="textarea"
               placeholder="请输入内容"
@@ -158,8 +158,6 @@ export default {
           console.log(err);
         });
       })
-
-
     }
   }
 }
@@ -172,5 +170,8 @@ export default {
 }
 .user{
   color: blue;
+}
+.el-button{
+  margin-top: 4px;
 }
 </style>

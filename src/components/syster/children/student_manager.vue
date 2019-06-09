@@ -2,19 +2,23 @@
 	<div>
     <el-form :inline="true" class="demo-form-inline">
        <el-form-item>
-          <el-input v-model="search" size="small" prefix-icon="el-icon-search" placeholder="请输入工号或姓名或班级" clearable></el-input>
+          <el-input v-model="search"  prefix-icon="el-icon-search" placeholder="请输入工号或姓名或班级" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="handleAdd">新增</el-button>
+          <el-button type="primary" @click="handleAdd">新增</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="clearFilter">清空筛选</el-button>
+          <el-button type="primary" @click="handleAddAll">批量添加</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button  type="primary" @click="clearFilter">清空筛选</el-button>
         </el-form-item>
     </el-form>
     <create_user ref="create_user" @create="update"></create_user>
     <create_user ref="update_user" @update="update"></create_user>
+    <create_many ref="create_many" @create="update"></create_many>
 	  <el-table
-      height="500"
+      height="450"
 	    ref="filterTable"
 	    :data="tableData.filter(data => !search || data.sno.toLowerCase().includes(search.toLowerCase()) || data.sname.toLowerCase().includes(search.toLowerCase()) || data.cname.toLowerCase().includes(search.toLowerCase()))"
 	    >
@@ -63,8 +67,10 @@
 
 <script>
   import create_user from './operation/create_student'
+  import create_many from './operation/create_manyStu'
+  import XLSX from 'xlsx'
   export default {
-    components:　{ create_user },
+    components:　{ create_user, create_many },
     data() {
       return {
         tableData: [],
@@ -75,6 +81,9 @@
       this.getData()
     },
     methods: {
+      handleAddAll() {
+        this.$refs.create_many.showFrame()
+      },
       filterSex(value, row) {
         return row.sex === value;
       },
