@@ -5,7 +5,7 @@
 </template>
 
 <style lang="less">
-// @import url("//at.alicdn.com/t/font_1178793_1sqnnqb8js8.css");
+@import url("./assets/iconfont/iconfont.css");
   #app {
     font-family: 'Helvetica Neue','Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

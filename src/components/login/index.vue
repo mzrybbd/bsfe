@@ -370,6 +370,7 @@
       font-family: "微软雅黑","Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
       text-align: center;
       line-height: 0em;
+      font-weight: 600px;
     }
     .register {
       font-size:14px;

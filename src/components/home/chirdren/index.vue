@@ -4,17 +4,17 @@
       <el-carousel :interval="5000" arrow="always" class="d_jump"  style="width:616px;">
         <el-carousel-item>
           <el-row>
-            <el-col :span="24"><img ref="imgHeight" src="../../../assets/img/1.png" class="banner_img" style="width:616px;" ></img></el-col>
+            <el-col :span="24"><img ref="imgHeight" :src="img1" class="banner_img" style="width:616px;" ></img></el-col>
           </el-row>
         </el-carousel-item>
         <el-carousel-item>
           <el-row>
-            <el-col :span="24"><img ref="imgHeight" src="../../../assets/img/2.jpg" class="banner_img" style="width:616px;" ></img></el-col>
+            <el-col :span="24"><img ref="imgHeight" :src="img2" class="banner_img" style="width:616px;" ></img></el-col>
           </el-row>
         </el-carousel-item>
         <el-carousel-item>
           <el-row>
-            <el-col :span="24"><img ref="imgHeight" src="../../../assets/img/3.jpg" class="banner_img" style="width:616px;"></img></el-col>
+            <el-col :span="24"><img ref="imgHeight" :src="img3" class="banner_img" style="width:616px;"></img></el-col>
           </el-row>
         </el-carousel-item>
       </el-carousel>
@@ -25,14 +25,6 @@
         <p style="font-size: 16px; margin:0;font-weight:600px">计算机组成原理是计算机专业必修的专业基础课，是理解和掌握计算机基本组成和基本工作原理的重要实践环节，通过此实践，可以深入了解计算机核心部件运算器和控制器的电路组成和控制方法，其先修课程包括汇编语言、数字逻辑电路等，后续课程包括编译原理，操作系统等，具有承上启下的重要性。</p>
       </el-card>
     </div>
-    <!-- <div class='box'>
-      <div><a href="http://localhost:3000/teacher/downloadFile?filename=./uploads/home/实验室硬件设备介绍.docx" >实验箱</a>
-      </div>
-      <div><a href="http://localhost:3000/teacher/downloadFile?filename=./uploads/home/运算器AM2901的组成和控制.docx" >运算器</a></div>
-      <div><a href="http://localhost:3000/teacher/downloadFile?filename=./uploads/home/微程序控制器的基本组成和控制方法.docx" >微程序控制器</a></div>
-      <div><a href="http://localhost:3000/teacher/downloadFile?filename=./uploads/home/组合逻辑控制器的基本电路组成和控制方法.docx" >组合逻辑控制器</a></div>
-      <div><a href="http://localhost:3000/teacher/downloadFile?filename=./uploads/home/isp MACH芯片.docx" >isp MACH芯片</a></div>
-    </div> -->
     <div style="display: flex;height:300px; margin-top:15px; ">
       <el-card class="box-card" style="width: 612px;">
         <div slot="header" class="clearfix">
@@ -73,6 +65,9 @@
 export default {
   data() {
     return {
+      img1: require('../../../assets/img/1.png'),
+      img2: require('../../../assets/img/2.jpg'),
+      img3: require('../../../assets/img/3.jpg'),
       show2: false,
       imgHeight: '300px',
       source: [],

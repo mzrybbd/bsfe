@@ -5,10 +5,10 @@
         <el-menu  router mode="horizontal" class="menu2" 
           active-text-color="#007fff">
           <div class="layout-logo">
-            <img src="../../assets/img/logo.png" style="height:38px;float:left;margin-top:9px;"></img>
+            <img :src="img" style="height:38px;float:left;margin-top:9px;"></img>
             <div class="em-medline"></div>
             <el-button  type="text" style="float:left;font-size: 22px; color: #2d8cf0;margin-top:6px; margin-left:12px;"> 计算机组成原理实验系统</el-button>
-            <img src="https://clubstyle.club.vmall.com/template/hw_fans/image/zh/css/img/forlove.png" class="em-forlove"></img>
+            <img :src="img2" class="em-forlove"></img>
           </div>
         <!-- <el-button type="text" icon="large iconfont icon-xueshimao-shi" style="color: #007fff; width:900px;"> 计算机组成原理实验系统</el-button> -->
         </el-menu>
@@ -59,7 +59,8 @@
 export default {
   data() {
     return {
-      // img: require("../../assets/img/logo.jpg") ,
+      img: require("../../assets/img/logo.png") ,
+      img2: require("../../assets/img/forlove.png") ,
       navList:[
         {name:'/index',navItem:'首页'},
         {name:'/coursetable',navItem:'课表'},

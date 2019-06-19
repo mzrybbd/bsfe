@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="学生管理" :visible.sync="dialogFormVisible">
+    <el-dialog title="请假管理" :visible.sync="dialogFormVisible">
       <div class ="box">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  size="small" label-width="80px" >
           <el-form-item prop="sno" label="学号" >
